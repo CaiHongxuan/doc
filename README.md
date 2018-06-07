@@ -1,4 +1,4 @@
-# ApiDoc
+# doc
 
 > A Vue.js project
 

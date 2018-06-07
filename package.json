@@ -1,8 +1,8 @@
 {
-  "name": "ApiDoc",
+  "name": "doc",
   "version": "1.0.0",
   "description": "A Vue.js project",
-  "author": "蔡俊贤 <1203673288@qq.com>",
+  "author": "Hongxuan",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
@@ -10,7 +10,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "mint-ui": "^2.2.13",
+    "element-ui": "^2.4.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },
