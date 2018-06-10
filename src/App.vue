@@ -1,23 +1,26 @@
 <template>
     <div id="app">
         <el-container>
-            <el-header>
+            <el-header v-show="this.$store.state.isShowNavBar">
                 <NavBar></NavBar>
             </el-header>
-            <el-main>
+            <el-container>
+                <SideBar v-show="this.$store.state.isShowSideBar"></SideBar>
                 <router-view/>
-            </el-main>
+            </el-container>
         </el-container>
     </div>
 </template>
 
 <script>
     import NavBar from './components/NavBar.vue';
+    import SideBar from './components/SideBar.vue';
 
     export default {
         name: 'App',
         components: {
-            NavBar
+            NavBar,
+            SideBar
         }
     }
 </script>

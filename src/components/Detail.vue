@@ -1,7 +1,9 @@
 <template>
-    <div>
+
+    <el-main>
         文档内容
-    </div>
+    </el-main>
+
 </template>
 
 <script scope>
