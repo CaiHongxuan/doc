@@ -1,7 +1,21 @@
 <template>
 
     <el-main>
-        文档内容
+        <h1>文档详情</h1>
+
+        <mavon-editor
+            v-model="value"
+            :subfield="false"
+            :editable="false"
+            defaultOpen="preview"
+            :toolbarsFlag="false"
+            :ishljs="true"
+            :navigation="true"
+        />
+
+        <router-link :to="{name:'Index'}">
+            <el-button type="primary">返回</el-button>
+        </router-link>
     </el-main>
 
 </template>
@@ -10,7 +24,9 @@
     export default {
         name: 'Detail',
         data () {
-            return {}
+            return {
+                value: "# Article title"
+            }
         }
     }
 </script>
