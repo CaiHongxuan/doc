@@ -115,4 +115,10 @@
         text-decoration: none;
         display: block;
     }
+    a:hover {
+        color: rgb(255, 208, 75);
+    }
+    .el-menu-item.is-active a {
+        color: rgb(255, 208, 75);
+    }
 </style>
