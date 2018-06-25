@@ -3,19 +3,20 @@
     <el-main>
         你好 {{ msg }}
 
-        <el-row :gutter="12">
-            <el-col :span="3" v-for="item in projects">
-                <el-card shadow="always">
-                    <img src="/static/favicon.ico" class="image">
-                    <div style="padding: 14px;">
-                        <h4>{{ item.name }}</h4>
-                        <span>{{ item.desc }}</span>
-                        <div class="bottom clearfix">
-                            <time class="time">{{ item.created_at }}</time>
-                            <el-button type="text" class="button">操作按钮</el-button>
+        <el-row :gutter="16">
+            <el-col :span="4" v-for="item in projects">
+                <router-link :to="item.link">
+                    <el-card shadow="always">
+                        <img src="/static/favicon.ico" class="image">
+                        <div>
+                            <h4>{{ item.name }}</h4>
+                            <span>{{ item.desc }}</span>
+                            <div class="bottom clearfix">
+                                <time class="time">{{ item.created_at }}</time>
+                            </div>
                         </div>
-                    </div>
-                </el-card>
+                    </el-card>
+                </router-link>
             </el-col>
         </el-row>
 
@@ -35,44 +36,50 @@
                     {
                         id: 1,
                         name: "项目1",
-                        desc: "简介1",
+                        desc: "简介1啥地方是否斯蒂芬斯蒂芬是多少斯蒂芬斯蒂芬",
                         created_at: "2018-06-20 21:32:04",
-                        icon: "/static/favicon.ico"
+                        icon: "/static/favicon.ico",
+                        link: '/Detail'
                     },
                     {
                         id: 2,
                         name: "项目2",
-                        desc: "简介2",
+                        desc: "简介2威尔士范德萨的发生的发生松岛枫松岛枫",
                         created_at: "2018-06-20 21:32:04",
-                        icon: "/static/favicon.ico"
+                        icon: "/static/favicon.ico",
+                        link: '/Detail'
                     },
                     {
                         id: 3,
                         name: "项目3",
-                        desc: "简介3",
+                        desc: "简介3松岛枫松岛枫微服务打发斯蒂芬",
                         created_at: "2018-06-20 21:32:04",
-                        icon: "/static/favicon.ico"
+                        icon: "/static/favicon.ico",
+                        link: '/Detail'
                     },
                     {
                         id: 4,
                         name: "项目4",
-                        desc: "简介4",
+                        desc: "简介4盛世嫡妃方位服务发斯蒂芬斯蒂芬速度发斯蒂芬斯蒂芬的",
                         created_at: "2018-06-20 21:32:04",
-                        icon: "/static/favicon.ico"
+                        icon: "/static/favicon.ico",
+                        link: '/Detail'
                     },
                     {
                         id: 5,
                         name: "项目5",
-                        desc: "简介5",
+                        desc: "简介5额外热温柔温柔温柔温柔是法国的法国大 个方法是否收到",
                         created_at: "2018-06-20 21:32:04",
-                        icon: "/static/favicon.ico"
+                        icon: "/static/favicon.ico",
+                        link: '/Detail'
                     },
                     {
                         id: 6,
                         name: "项目6",
-                        desc: "简介6",
+                        desc: "简介6尾而对方告诉对方广东分公司的风格的风格的风格的风格 该责任",
                         created_at: "2018-06-20 21:32:04",
-                        icon: "/static/favicon.ico"
+                        icon: "/static/favicon.ico",
+                        link: '/Detail'
                     },
                 ]
             }
@@ -83,7 +90,16 @@
     }
 </script>
 
-<style>
+<style scoped>
+a {
+    color: #000;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+h4 {
+    text-align: center;
+}
 .time {
     font-size: 13px;
     color: #999;
@@ -92,10 +108,6 @@
 .bottom {
     margin-top: 13px;
     line-height: 12px;
-}
-.button {
-    padding: 0;
-    float: right;
 }
 .image {
     width: 100%;
