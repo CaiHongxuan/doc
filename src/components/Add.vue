@@ -1,7 +1,7 @@
 <template>
 
     <el-main>
-        <h1>新增编辑文档</h1>
+        <h1 class="title">新增编辑文档</h1>
 
         <el-form :inline="true" label-position="left" :rules="rules" ref="form" :model="form">
             <el-row>
@@ -44,40 +44,7 @@
                 <el-tab-pane label="请求参数（Query）" name="parameters">
 
                     <Parameters v-for="(parameter, index) in form.parameters" :parameter="parameter" v-on:changeItem="removeParaItem(index)"></Parameters>
-                    <!-- <el-row prop="parameters" v-for="(parameter, index) in form.parameters">
-                        <el-col :span="6">
-                            <el-form-item label="参数名称" prop="name">
-                                <el-input v-model="parameter.name" size="small"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="3">
-                            <el-form-item label="是否必填" prop="is_must">
-                                <el-switch v-model="parameter.is_must"></el-switch>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="类型" prop="value">
-                                <el-select v-model="parameter.type" size="small">
-                                    <el-option label="string" value="0"></el-option>
-                                    <el-option label="int" value="1"></el-option>
-                                    <el-option label="number" value="2"></el-option>
-                                    <el-option label="array" value="3"></el-option>
-                                    <el-option label="json" value="4"></el-option>
-                                    <el-option label="any" value="5"></el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="备注" prop="remark">
-                                <el-input v-model="parameter.remark" size="small"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="1">
-                            <el-form-item>
-                                <i class="el-icon-error" @click="removeParaItem(index)"></i>
-                            </el-form-item>
-                        </el-col>
-                    </el-row> -->
+
                     <el-row>
                         <el-button size="small" @click="addParaItem()">添加参数</el-button>
                     </el-row>
@@ -141,7 +108,7 @@
                 rules: {
                     name: [
                         { required: true, message: '请输入接口名称', trigger: 'blur' },
-                        { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                        { min: 3, message: '长度不小于 3 个字符', trigger: 'blur' }
                     ],
                     url: [
                         { required: true, message: '请输入接口地址', trigger: 'blur' }
@@ -175,6 +142,9 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
+                        //
+                        // todo 表单提交
+                        //
                         alert('submit!');
                     } else {
                         console.log('error submit!!');
@@ -217,7 +187,7 @@
 </script>
 
 <style>
-    h1 {
+    .title {
         text-align: center;
     }
     .parameters_field {
