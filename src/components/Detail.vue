@@ -1,7 +1,7 @@
 <template>
 
     <el-main>
-        <h1>文档详情</h1>
+        <h1 class="title">文档详情</h1>
 
         <mavon-editor
             v-model="value"
@@ -32,9 +32,6 @@
 </script>
 
 <style>
-    h1 {
-        text-align: center;
-    }
     .reback {
         margin-top: 15px;
         float: right;

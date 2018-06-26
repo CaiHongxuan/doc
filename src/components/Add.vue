@@ -67,6 +67,7 @@
                 :ishljs="true"
                 :navigation="false"
                 @save="save()"
+                style="min-height:600px;"
             />
 
             <el-form-item class="reback">
@@ -187,9 +188,6 @@
 </script>
 
 <style>
-    .title {
-        text-align: center;
-    }
     .parameters_field {
         border: 1px solid #ebebeb;
         border-radius: 3px;

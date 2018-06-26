@@ -29,9 +29,7 @@
         </el-col>
         <el-col :span="1">
             <el-form-item>
-                <!-- <router-link @click="removeItem"> -->
-                    <i class="el-icon-error" @click="removeItem"></i>
-                <!-- </router-link> -->
+                <i class="el-icon-error remove" @click="removeItem"></i>
             </el-form-item>
         </el-col>
     </el-row>
@@ -58,3 +56,9 @@
         }
     }
 </script>
+
+<style>
+    .remove {
+        cursor: pointer;
+    }
+</style>
