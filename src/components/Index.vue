@@ -4,7 +4,7 @@
         你好 {{ msg }}
 
         <el-row :gutter="16">
-            <el-col :span="4" v-for="item in projects" :key="key">
+            <el-col :span="4" v-for="item in projects" :key="item.id">
                 <router-link :to="item.link">
                     <el-card shadow="always">
                         <img src="/static/favicon.ico" class="image">

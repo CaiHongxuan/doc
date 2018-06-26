@@ -42,20 +42,22 @@
 
             <el-tabs v-model="activeName" class="parameters_field">
                 <el-tab-pane label="请求参数（Query）" name="parameters">
-                    <el-row prop="parameters">
+
+                    <Parameters v-for="(parameter, index) in form.parameters" :parameter="parameter" v-on:changeItem="removeParaItem(index)"></Parameters>
+                    <!-- <el-row prop="parameters" v-for="(parameter, index) in form.parameters">
                         <el-col :span="6">
                             <el-form-item label="参数名称" prop="name">
-                                <el-input v-model="form.parameters" size="small"></el-input>
+                                <el-input v-model="parameter.name" size="small"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="3">
                             <el-form-item label="是否必填" prop="is_must">
-                                <el-switch v-model="form.parameters"></el-switch>
+                                <el-switch v-model="parameter.is_must"></el-switch>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
                             <el-form-item label="类型" prop="value">
-                                <el-select v-model="form.type" size="small">
+                                <el-select v-model="parameter.type" size="small">
                                     <el-option label="string" value="0"></el-option>
                                     <el-option label="int" value="1"></el-option>
                                     <el-option label="number" value="2"></el-option>
@@ -67,53 +69,61 @@
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="备注" prop="remark">
-                                <el-input v-model="form.parameters" size="small"></el-input>
+                                <el-input v-model="parameter.remark" size="small"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="1">
                             <el-form-item>
-                                <i class="el-icon-error"></i>
+                                <i class="el-icon-error" @click="removeParaItem(index)"></i>
                             </el-form-item>
                         </el-col>
-                    </el-row>
+                    </el-row> -->
                     <el-row>
-                        <el-button size="small">添加参数</el-button>
+                        <el-button size="small" @click="addParaItem()">添加参数</el-button>
                     </el-row>
                 </el-tab-pane>
                 <el-tab-pane label="头部（Headers）" name="headers">
+
+                    <Parameters v-for="(header, index) in form.headers" :parameter="header" v-on:changeItem="removeHeaderItem(index)"></Parameters>
+
                     <el-row>
-                        <el-button size="small">添加参数</el-button>
+                        <el-button size="small" @click="addHeaderItem()">添加参数</el-button>
                     </el-row>
                 </el-tab-pane>
             </el-tabs>
 
-            <el-form-item>
+            <mavon-editor
+                v-model="value"
+                :subfield="true"
+                :editable="true"
+                :toolbarsFlag="true"
+                :ishljs="true"
+                :navigation="false"
+                @save="save()"
+            />
+
+            <el-form-item class="reback">
+                <router-link :to="{name:'Detail'}">
+                    <el-button type="primary">返回</el-button>
+                </router-link>
                 <el-button type="primary" @click="submitForm('form')">立即创建</el-button>
                 <el-button @click="resetForm('form')">重置</el-button>
             </el-form-item>
 
         </el-form>
 
-        <mavon-editor
-            v-model="value"
-            :subfield="true"
-            :editable="true"
-            :toolbarsFlag="true"
-            :ishljs="true"
-            :navigation="false"
-            @save="save()"
-        />
-
-        <router-link :to="{name:'Detail'}">
-            <el-button type="primary">返回</el-button>
-        </router-link>
     </el-main>
 
 </template>
 
 <script scope>
+    import Parameters from './Parameters.vue';
+
     export default {
         name: 'Add',
+        components: {
+            Parameters
+        },
         data () {
             return {
                 value: '# This is a title',
@@ -124,8 +134,10 @@
                     method: '1',
                     status: '0',
                     version: 1,
-                    parameters: []
+                    parameters: [],
+                    headers: []
                 },
+                // 验证规则
                 rules: {
                     name: [
                         { required: true, message: '请输入接口名称', trigger: 'blur' },
@@ -139,9 +151,6 @@
                     ],
                     status: [
                         { required: true, message: '请选择开发状态', trigger: 'change' }
-                    ],
-                    version: [
-                        { required: true, message: '请填写接口版本', trigger: 'blur' }
                     ]
                 }
             }
@@ -176,20 +185,50 @@
             // 重置表单
             resetForm(formName) {
                 this.$refs[formName].resetFields();
+            },
+            // 添加一个请求参数
+            addParaItem() {
+                this.form.parameters.push({
+                    name: '',
+                    is_must: false,
+                    type: '0',
+                    remark: ''
+                });
+            },
+            // 删除一个请求参数
+            removeParaItem(index) {
+                this.form.parameters.splice(index, 1);
+            },
+            // 添加一个Header参数
+            addHeaderItem() {
+                this.form.headers.push({
+                    name: '',
+                    is_must: false,
+                    type: '0',
+                    remark: ''
+                });
+            },
+            // 删除一个Header参数
+            removeHeaderItem(index) {
+                this.form.headers.splice(index, 1);
             }
         }
     }
 </script>
 
 <style>
-h1 {
-    text-align: center;
-}
-.parameters_field {
-    border: 1px solid #ebebeb;
-    border-radius: 3px;
-    transition: .2s;
-    padding: 24px;
-    margin-bottom: 15px;
-}
+    h1 {
+        text-align: center;
+    }
+    .parameters_field {
+        border: 1px solid #ebebeb;
+        border-radius: 3px;
+        transition: .2s;
+        padding: 24px;
+        margin-bottom: 15px;
+    }
+    .reback {
+        margin-top: 15px;
+        float: right;
+    }
 </style>

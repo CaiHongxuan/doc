@@ -10,17 +10,17 @@
         active-text-color="#ffd04b"
         show-timeout=0
     >
-        <el-submenu v-for="menu in menus" :key="menu_key" v-if="menu.children.length" :index="menu.id">
+        <el-submenu v-for="menu in menus" :key="menu.id" v-if="menu.children.length" :index="menu.id">
             <template slot="title">
                 <i class="el-icon-document"></i>
                 <span>{{ menu.name }}</span>
             </template>
-            <el-submenu v-for="child in menu.children" :key="child_key" v-if="child.children.length" :index="child.id">
+            <el-submenu v-for="child in menu.children" :key="child.id" v-if="child.children.length" :index="child.id">
                 <template slot="title">
                     <i class="el-icon-document"></i>
                     <span>{{ child.name }}</span>
                 </template>
-                <el-menu-item v-for="item in child.children" :key="item_key" :index="item.id">
+                <el-menu-item v-for="item in child.children" :key="item.id" :index="item.id">
                     <router-link :to="item.link">{{ item.name }}</router-link>
                 </el-menu-item>
             </el-submenu>
