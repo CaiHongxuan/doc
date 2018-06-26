@@ -67,7 +67,7 @@
                 :ishljs="true"
                 :navigation="false"
                 @save="save()"
-                style="min-height:600px;"
+                class="mavon"
             />
 
             <el-form-item class="reback">
@@ -198,5 +198,8 @@
     .reback {
         margin-top: 15px;
         float: right;
+    }
+    .mavon {
+        min-height: 600px;
     }
 </style>

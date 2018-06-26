@@ -1,22 +1,26 @@
 <template>
 
     <el-main>
-        你好 {{ msg }}
+        <h1 class="title">项目列表</h1>
 
-        <el-row :gutter="16">
-            <el-col :span="4" v-for="item in projects" :key="item.id">
-                <router-link :to="item.link">
-                    <el-card shadow="always">
-                        <img src="/static/favicon.ico" class="image">
-                        <div>
-                            <h4>{{ item.name }}</h4>
-                            <span>{{ item.desc }}</span>
-                            <div class="bottom clearfix">
-                                <time class="time">{{ item.created_at }}</time>
-                            </div>
-                        </div>
-                    </el-card>
-                </router-link>
+        <el-row>
+            <el-col :span="20" offset="2">
+                <el-row :gutter="16">
+                    <el-col :span="4" v-for="item in projects" :key="item.id" class="card">
+                        <router-link :to="item.link">
+                            <el-card shadow="always">
+                                <img :src="item.icon" class="image">
+                                <div>
+                                    <h4 class="title">{{ item.name }}</h4>
+                                    <span>{{ item.desc }}</span>
+                                    <div class="bottom clearfix">
+                                        <time class="time">{{ item.created_at }}</time>
+                                    </div>
+                                </div>
+                            </el-card>
+                        </router-link>
+                    </el-col>
+                </el-row>
             </el-col>
         </el-row>
 
@@ -97,9 +101,6 @@ a {
     display: block;
     text-align: left;
 }
-h4 {
-    text-align: center;
-}
 .time {
     font-size: 13px;
     color: #999;
@@ -118,8 +119,10 @@ h4 {
     display: table;
     content: "";
 }
-
 .clearfix:after {
     clear: both
+}
+.card {
+    margin-bottom: 15px;
 }
 </style>
