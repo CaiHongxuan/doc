@@ -1,52 +1,29 @@
 <template>
 
     <el-aside>
-        <el-menu :default-openeds="['1', '3']">
-            <el-submenu index="1">
-                <template slot="title"><i class="el-icon-message"></i>导航一</template>
-                <el-menu-item-group>
-                    <template slot="title">分组一</template>
-                    <el-menu-item index="1-1">选项1</el-menu-item>
-                    <el-menu-item index="1-2">选项2</el-menu-item>
-                </el-menu-item-group>
-                <el-menu-item-group title="分组2">
-                    <el-menu-item index="1-3">选项3</el-menu-item>
-                </el-menu-item-group>
-                <el-submenu index="1-4">
-                    <template slot="title">选项4</template>
-                    <el-menu-item index="1-4-1">选项4-1</el-menu-item>
+        <el-menu :default-openeds="openeds">
+            <el-submenu v-for="sidebar in sidebars" v-if="sidebar.children.length" :key="sidebar.id" :index="sidebar.id">
+                <template slot="title"><i class="el-icon-message"></i>{{ sidebar.name }}</template>
+                <el-submenu v-for="child in sidebar.children" v-if="child.children.length" :key="child.id" :index="child.id">
+                    <template slot="title"><i class="el-icon-message"></i>{{ child.name }}</template>
+
+                    <el-submenu v-for="item in child.children" v-if="item.children.length" :key="item.id" :index="item.id">
+                        <template slot="title"><i class="el-icon-message"></i>{{ item.name }}</template>
+                        <el-menu-item v-for="single in item.children" :key="single.id" :index="single.id">
+                            <i class="el-icon-document"></i>{{ single.name }}
+                        </el-menu-item>
+                    </el-submenu>
+                    <el-menu-item v-else :key="item.id" :index="item.id">
+                        <i class="el-icon-document"></i>{{ item.name }}
+                    </el-menu-item>
                 </el-submenu>
+                <el-menu-item v-else :key="child.id" :index="child.id">
+                    <i class="el-icon-document"></i>{{ child.name }}
+                </el-menu-item>
             </el-submenu>
-            <el-submenu index="2">
-                <template slot="title"><i class="el-icon-menu"></i>导航二</template>
-                <el-menu-item-group>
-                    <template slot="title">分组一</template>
-                    <el-menu-item index="2-1">选项1</el-menu-item>
-                    <el-menu-item index="2-2">选项2</el-menu-item>
-                </el-menu-item-group>
-                <el-menu-item-group title="分组2">
-                    <el-menu-item index="2-3">选项3</el-menu-item>
-                </el-menu-item-group>
-                <el-submenu index="2-4">
-                    <template slot="title">选项4</template>
-                    <el-menu-item index="2-4-1">选项4-1</el-menu-item>
-                </el-submenu>
-            </el-submenu>
-            <el-submenu index="3">
-                <template slot="title"><i class="el-icon-setting"></i>导航三</template>
-                <el-menu-item-group>
-                    <template slot="title">分组一</template>
-                    <el-menu-item index="3-1">选项1</el-menu-item>
-                    <el-menu-item index="3-2">选项2</el-menu-item>
-                </el-menu-item-group>
-                <el-menu-item-group title="分组2">
-                    <el-menu-item index="3-3">选项3</el-menu-item>
-                </el-menu-item-group>
-                <el-submenu index="3-4">
-                    <template slot="title">选项4</template>
-                    <el-menu-item index="3-4-1">选项4-1</el-menu-item>
-                </el-submenu>
-            </el-submenu>
+            <el-menu-item v-else :key="sidebar.id" :index="sidebar.id">
+                <i class="el-icon-document"></i>{{ sidebar.name }}
+            </el-menu-item>
         </el-menu>
     </el-aside>
 
@@ -54,6 +31,83 @@
 
 <script>
     export default {
-        name: 'SideBar'
+        name: 'SideBar',
+        data() {
+            return {
+                openeds: ['1', '2'],
+                sidebars: [
+                    {
+                        id: '1',
+                        name: '导航一',
+                        children: [
+                            {
+                                id: '2',
+                                name: '导航1-1',
+                                children: [
+                                    {
+                                        id: '3',
+                                        name: '导航1-1-1',
+                                        children: [
+                                            {
+                                                id: '7',
+                                                name: '导航1-1-1-1',
+                                                children: []
+                                            },
+                                            {
+                                                id: '10',
+                                                name: '导航1-1-1-2',
+                                                children: []
+                                            }
+                                        ],
+                                    },
+                                    {
+                                        id: '6',
+                                        name: '导航1-1-2',
+                                        children: [],
+                                    },
+                                    {
+                                        id: '8',
+                                        name: '导航1-1-3',
+                                        children: [],
+                                    },
+                                    {
+                                        id: '9',
+                                        name: '导航1-1-4',
+                                        children: [],
+                                    }
+                                ]
+                            },
+                            {
+                                id: '4',
+                                name: '导航1-2',
+                                children: []
+                            }
+                        ]
+                    },
+                    {
+                        id: '5',
+                        name: '导航二',
+                        children: [
+                            {
+                                id: '11',
+                                name: '导航2-1',
+                                children: []
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
     }
 </script>
+
+<style scoped>
+    a {
+        color: #303133;
+        text-decoration: none;
+        display: block;
+    }
+    .is-active a {
+        color: #409EFF;
+    }
+</style>

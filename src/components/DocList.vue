@@ -70,6 +70,9 @@
                 <el-form-item label="目录名称" :label-width="dialogform.formLabelWidth">
                     <el-input v-model="dialogform.name" auto-complete="off"></el-input>
                 </el-form-item>
+                <el-form-item label="序号" :label-width="dialogform.formLabelWidth">
+                    <el-input v-model="dialogform.sort" auto-complete="off"></el-input>
+                </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogform.dialogFormVisible = false">取 消</el-button>
@@ -105,6 +108,7 @@
                 dialogform: {
                     name: '',
                     parents: [],
+                    sort: 99,
                     options: [{
                         value: 'zhinan',
                         label: '指南',

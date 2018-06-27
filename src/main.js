@@ -12,7 +12,7 @@ import 'mavon-editor/dist/css/index.css'
 
 Vue.use(ElementUI);
 Vue.use(Vuex);
-Vue.use(mavonEditor)
+Vue.use(mavonEditor);
 
 Vue.config.productionTip = false
 

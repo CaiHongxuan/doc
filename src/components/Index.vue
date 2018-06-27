@@ -5,8 +5,15 @@
 
         <el-row>
             <el-col :span="20" :offset="2">
-                <el-row>
-                    <el-button type="primary" class="add-project" plain @click="dialogFormVisible = true">新增项目</el-button>
+                <el-row :gutter="16">
+                    <el-col :span="11" :offset="6">
+                        <el-input placeholder="请输入内容" class="input-with-select" size="small">
+                            <el-button slot="append" icon="el-icon-search">搜索文档</el-button>
+                        </el-input>
+                    </el-col>
+                    <el-col :span="7">
+                        <el-button type="primary" size="small" class="add-project" plain @click="dialogFormVisible = true">新增项目</el-button>
+                    </el-col>
                 </el-row>
                 <el-row :gutter="16">
                     <el-col :span="4" v-for="item in projects" :key="item.id" class="card">
@@ -15,7 +22,7 @@
                                 <img :src="item.icon" class="image">
                                 <div>
                                     <h4 class="title">{{ item.name }}</h4>
-                                    <span>{{ item.desc }}</span>
+                                    <span class="desc">{{ item.desc }}</span>
                                     <div class="bottom clearfix">
                                         <time class="time">{{ item.created_at }}</time>
                                     </div>
@@ -39,6 +46,9 @@
                 </el-form-item>
                 <el-form-item label="项目简介" :label-width="formLabelWidth">
                     <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 6 }" v-model="form.desc" auto-complete="off"></el-input>
+                </el-form-item>
+                <el-form-item label="序号" :label-width="formLabelWidth">
+                    <el-input v-model="form.sort" auto-complete="off"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -112,7 +122,8 @@
                 dialogFormVisible: false,
                 form: {
                     name: '',
-                    desc: ''
+                    desc: '',
+                    sort: 99
                 },
                 formLabelWidth: '100px',
                 dialogWidth: '500px'
@@ -132,8 +143,10 @@
         text-align: left;
     }
     .add-project {
-        float: right;
-        margin-bottom: 15px;
+        margin: 0px 0px 15px 15px;
+    }
+    .desc {
+        font-size: 14px;
     }
     .time {
         font-size: 13px;

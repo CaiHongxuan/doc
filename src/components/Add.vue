@@ -43,7 +43,7 @@
             <el-tabs v-model="activeName" class="parameters_field">
                 <el-tab-pane label="请求参数（Query）" name="parameters">
 
-                    <Parameters v-for="(parameter, index) in form.parameters" :parameter="parameter" v-on:changeItem="removeParaItem(index)"></Parameters>
+                    <parameters v-for="(parameter, index) in form.parameters" :parameter="parameter" v-on:changeItem="removeParaItem(index)"></parameters>
 
                     <el-row>
                         <el-button size="small" @click="addParaItem()">添加参数</el-button>
@@ -51,7 +51,7 @@
                 </el-tab-pane>
                 <el-tab-pane label="头部（Headers）" name="headers">
 
-                    <Parameters v-for="(header, index) in form.headers" :parameter="header" v-on:changeItem="removeHeaderItem(index)"></Parameters>
+                    <parameters v-for="(header, index) in form.headers" :parameter="header" v-on:changeItem="removeHeaderItem(index)"></parameters>
 
                     <el-row>
                         <el-button size="small" @click="addHeaderItem()">添加参数</el-button>
@@ -85,12 +85,12 @@
 </template>
 
 <script scope>
-    import Parameters from './Parameters.vue';
+    import parameters from './Parameters.vue';
 
     export default {
         name: 'Add',
         components: {
-            Parameters
+            parameters
         },
         data () {
             return {
