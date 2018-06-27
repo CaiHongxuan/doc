@@ -21,30 +21,33 @@
 </template>
 
 <script>
-    import axios from 'axios'
+    import store from '../store/store'
 
     export default {
         name: 'Detail',
         data () {
             return {
-                content: "# Article title"
+                content: ""
             }
         },
         methods: {
             load(id) {
                 let that = this;
-                axios.get('http://www.apidoc.test/v1/docs/' + id, {}).then(function(response){
+                that.$axios.get('/docs/' + id, {}).then(function(response){
                     if (response.status == 200 && response.data.code == 0) {
-                        that.content = response.data.data.content
+                        that.content = response.data.data.content;
+                    } else if (response.status === -404) {
+                        that.$message.error(response.msg);
                     } else {
                         that.$message.error(response.data.msg);
                     }
                 }).catch(function(response){
-                    console.log(response);//发生错误时执行的代码
+                    console.log(response); // 发生异常错误时执行的代码
                 });
             }
         },
         mounted() {
+            store.commit('showSideBar');
             this.load(this.$route.params.id);
         },
         watch: {

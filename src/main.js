@@ -9,10 +9,13 @@ import router from './router'
 import store from './store/store.js'
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
+import axios from './utils/http.js'
 
 Vue.use(ElementUI);
 Vue.use(Vuex);
 Vue.use(mavonEditor);
+
+Vue.prototype.$axios = axios;
 
 Vue.config.productionTip = false
 

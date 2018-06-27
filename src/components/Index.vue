@@ -17,7 +17,7 @@
                 </el-row>
                 <el-row :gutter="16">
                     <el-col :span="4" v-for="item in projects" :key="item.id" class="card">
-                        <router-link :to="item.link">
+                        <router-link :to="{path:'/doclist/' + item.id}">
                             <el-card shadow="always">
                                 <img :src="item.icon" class="image">
                                 <div>
@@ -53,7 +53,7 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                <el-button type="primary" @click="addProject">确 定</el-button>
             </div>
         </el-dialog>
 
@@ -75,48 +75,42 @@
                         name: "项目1",
                         desc: "简介1啥地方是否斯蒂芬斯蒂芬是多少斯蒂芬斯蒂芬",
                         created_at: "2018-06-20 21:32:04",
-                        icon: "/static/favicon.ico",
-                        link: '/doclist'
+                        icon: "/static/favicon.ico"
                     },
                     {
                         id: 2,
                         name: "项目2",
                         desc: "简介2威尔士范德萨的发生的发生松岛枫松岛枫",
                         created_at: "2018-06-20 21:32:04",
-                        icon: "/static/favicon.ico",
-                        link: '/doclist'
+                        icon: "/static/favicon.ico"
                     },
                     {
                         id: 3,
                         name: "项目3",
                         desc: "简介3松岛枫松岛枫微服务打发斯蒂芬",
                         created_at: "2018-06-20 21:32:04",
-                        icon: "/static/favicon.ico",
-                        link: '/doclist'
+                        icon: "/static/favicon.ico"
                     },
                     {
                         id: 4,
                         name: "项目4",
                         desc: "简介4盛世嫡妃方位服务发斯蒂芬斯蒂芬速度发斯蒂芬斯蒂芬的",
                         created_at: "2018-06-20 21:32:04",
-                        icon: "/static/favicon.ico",
-                        link: '/doclist'
+                        icon: "/static/favicon.ico"
                     },
                     {
                         id: 5,
                         name: "项目5",
                         desc: "简介5额外热温柔温柔温柔温柔是法国的法国大 个方法是否收到",
                         created_at: "2018-06-20 21:32:04",
-                        icon: "/static/favicon.ico",
-                        link: '/doclist'
+                        icon: "/static/favicon.ico"
                     },
                     {
                         id: 6,
                         name: "项目6",
                         desc: "简介6尾而对方告诉对方广东分公司的风格的风格的风格的风格 该责任",
                         created_at: "2018-06-20 21:32:04",
-                        icon: "/static/favicon.ico",
-                        link: '/Detail'
+                        icon: "/static/favicon.ico"
                     },
                 ],
                 dialogFormVisible: false,
@@ -129,7 +123,40 @@
                 dialogWidth: '500px'
             }
         },
+        methods: {
+            load() {
+                let that = this;
+                that.$axios.get('/projects', {}).then(function(response){
+                    if (response.status == 200 && response.data.code == 0) {
+                        that.projects = response.data.data.data;
+                    } else if (response.status === -404) {
+                        that.$message.error(response.msg);
+                    } else {
+                        that.$message.error(response.data.msg);
+                    }
+                }).catch(function(response){
+                    console.log(response); // 发生异常错误时执行的代码
+                });
+            },
+            addProject() {
+                let that = this;
+                that.$axios.post('/projects', that.form).then(function(response){
+                    if (response.status == 200 && response.data.code == 0) {
+                        that.projects = response.data.data.data;
+                        that.$message.success('新建成功');
+                    } else if (response.status === -404) {
+                        that.$message.error(response.msg);
+                    } else {
+                        that.$message.error(response.data.msg);
+                    }
+                }).catch(function(response){
+                    console.log(response); // 发生异常错误时执行的代码
+                });
+                this.dialogFormVisible = false;
+            }
+        },
         mounted () {
+            this.load();
             store.commit('hideSideBar');
         }
     }

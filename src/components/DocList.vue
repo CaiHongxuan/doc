@@ -84,6 +84,8 @@
 </template>
 
 <script>
+    import store from '../store/store'
+
     export default {
         name: 'DocList',
         data () {
@@ -150,6 +152,9 @@
             loadData (page) {
                 console.log(page);
             }
+        },
+        mounted() {
+            store.commit('showSideBar');
         }
     }
 </script>

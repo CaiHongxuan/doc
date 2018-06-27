@@ -14,6 +14,12 @@ const mutations = {
     },
     hideSideBar (state) {
         state.isShowSideBar = false
+    },
+    showNavBar (state) {
+        state.isShowNavBar = true
+    },
+    showSideBar (state) {
+        state.isShowSideBar = true
     }
 }
 
