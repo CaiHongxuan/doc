@@ -21,8 +21,6 @@
 </template>
 
 <script>
-    import store from '../store/store'
-
     export default {
         name: 'Detail',
         data () {
@@ -48,7 +46,6 @@
         },
         mounted() {
             this.load(this.$route.params.id);
-            store.commit('showSideBar');
         },
         watch: {
             '$route' (to, from) {

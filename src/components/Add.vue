@@ -1,22 +1,51 @@
 <template>
 
     <el-main>
-        <h1 class="title">新增/编辑文档</h1>
+        <h1 class="title" v-if="$route.params.id">编辑文档</h1>
+        <h1 class="title" v-else>新增文档</h1>
 
         <el-form :inline="true" label-position="left" :rules="rules" ref="form" :model="form">
-            <el-row>
-                <el-col :span="12">
-                    <el-form-item label="接口名称" prop="name">
-                        <el-input v-model="form.name" size="small"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="接口地址" prop="url">
-                        <el-input v-model="form.url" size="small"></el-input>
-                    </el-form-item>
-                </el-col>
+            <el-row v-if="$route.query.type == 1">
+                <el-form-item label="名称" prop="name">
+                    <el-input v-model="form.name" size="small"></el-input>
+                </el-form-item>
+                <el-form-item label="接口地址" prop="url">
+                    <el-input v-model="form.url" size="small"></el-input>
+                </el-form-item>
+                <el-form-item label="所属目录" prop="cats.parents">
+                    <el-cascader
+                        :options="form.cats.options"
+                        v-model="form.cats.parents"
+                        :props="form.cats.props"
+                        filterable
+                        change-on-select>
+                    </el-cascader>
+                </el-form-item>
+                <el-form-item label="序号" prop="sort">
+                    <el-input v-model="form.sort" size="small"></el-input>
+                </el-form-item>
             </el-row>
-            <el-row>
+            <el-row v-else>
+                <el-form-item label="名称" prop="name">
+                    <el-input v-model="form.name" size="small"></el-input>
+                </el-form-item>
+                <el-form-item label="版本：">
+                    {{ form.version }}
+                </el-form-item>
+                <el-form-item label="所属目录">
+                    <el-cascader
+                        :options="form.cats.options"
+                        v-model="form.cats.parents"
+                        :props="form.cats.props"
+                        filterable
+                        change-on-select>
+                    </el-cascader>
+                </el-form-item>
+                <el-form-item label="序号" prop="sort">
+                    <el-input v-model="form.sort" size="small"></el-input>
+                </el-form-item>
+            </el-row>
+            <el-row v-if="$route.query.type == 1">
                 <el-form-item label="请求方式" prop="method">
                     <el-select v-model="form.method" placeholder="请选择请求方式"  size="small">
                         <el-option label="Any" value="0"></el-option>
@@ -40,7 +69,7 @@
                 </el-form-item>
             </el-row>
 
-            <el-tabs v-model="activeName" class="parameters_field">
+            <el-tabs v-model="activeName" class="parameters_field" v-if="$route.query.type == 1">
                 <el-tab-pane label="请求参数（Query）" name="parameters">
 
                     <parameters v-for="(parameter, index) in form.parameters" :parameter="parameter" v-on:changeItem="removeParaItem(index)"></parameters>
@@ -60,7 +89,7 @@
             </el-tabs>
 
             <mavon-editor
-                v-model="value"
+                v-model="content"
                 :subfield="true"
                 :editable="true"
                 :toolbarsFlag="true"
@@ -72,8 +101,9 @@
 
             <el-form-item class="reback">
                 <el-button type="primary" onclick="history.go(-1)">返回</el-button>
-                <el-button type="primary" @click="submitForm('form')">立即创建</el-button>
                 <el-button @click="resetForm('form')">重置</el-button>
+                <el-button type="primary" @click="submitForm('form')" v-if="$route.params.id">提交更新</el-button>
+                <el-button type="primary" @click="submitForm('form')" v-else>立即创建</el-button>
             </el-form-item>
 
         </el-form>
@@ -92,22 +122,34 @@
         },
         data () {
             return {
-                value: '# This is a title',
                 activeName: 'parameters',
+                content: '',
                 form: {
                     name: '',
                     url: '',
+                    sort: 99,
                     method: '1',
                     status: '0',
                     version: 1,
                     parameters: [],
-                    headers: []
+                    headers: [],
+                    cats: {
+                        parents: [],
+                        props: {
+                            value: 'id',
+                            label: 'name'
+                        },
+                        options: [],
+                    }
                 },
                 // 验证规则
                 rules: {
                     name: [
-                        { required: true, message: '请输入接口名称', trigger: 'blur' },
+                        { required: true, message: '请输入文档名称', trigger: 'blur' },
                         { min: 3, message: '长度不小于 3 个字符', trigger: 'blur' }
+                    ],
+                    parents: [
+                        { required: true, message: '请选择所属目录', trigger: 'blur' }
                     ],
                     url: [
                         { required: true, message: '请输入接口地址', trigger: 'blur' }
@@ -122,10 +164,48 @@
             }
         },
         methods: {
+            // 加载文档详情
+            load(id) {
+                let that = this;
+                that.$axios.get('/docs/' + id, {}).then(function(response){
+                    if (response.status == 200 && response.data.code == 0) {
+                        let resData = response.data.data;
+                        that.content = resData.content;
+                        that.form.name = resData.title;
+                        that.form.url = resData.url;
+                        that.form.method = ''+resData.method;
+                        that.form.status = ''+resData.status;
+                        that.form.version = resData.version;
+                        that.form.parameters = resData.arguments;
+                        that.form.headers = resData.arguments;
+                    } else if (response.status === -404) {
+                        that.$message.error(response.msg);
+                    } else {
+                        that.$message.error(response.data.msg);
+                    }
+                }).catch(function(response){
+                    console.log(response); // 发生异常错误时执行的代码
+                });
+            },
+            // 加载目录
+            loadCats (projectId) {
+                let that = this;
+                that.$axios.get('/catalogs', {pro_id:projectId}).then(function(response){
+                    if (response.status == 200 && response.data.code == 0) {
+                        that.form.cats.options = response.data.data;
+                    } else if (response.status === -404) {
+                        that.$message.error(response.msg);
+                    } else {
+                        that.$message.error(response.data.msg);
+                    }
+                }).catch(function(response){
+                    console.log(response); // 发生异常错误时执行的代码
+                });
+            },
             // 保存文件
             save() {
                 var urlObject = window.URL || window.webkitURL || window;
-                var downloadData = new Blob([this.value]);
+                var downloadData = new Blob([this.content]);
                 var save_link = document.createElementNS("http://www.w3.org/1999/xhtml", "a")
                 save_link.href = urlObject.createObjectURL(downloadData);
                 console.log(save_link, save_link.href);
@@ -144,6 +224,17 @@
                         //
                         // todo 表单提交
                         //
+                        let that = this;
+                        let data = {
+                            title: that.form.name,
+                            type: that.$route.query.type,
+                            method: that.form.method,
+                            arguments: that.form.name,
+                            content: that.content,
+                            cat_id: that.form.cats.parents[that.form.cats.parents.length - 1],
+                            sort: that.form.sort
+                        };
+                        console.log(data);
                         alert('submit!');
                     } else {
                         console.log('error submit!!');
@@ -181,6 +272,12 @@
             removeHeaderItem(index) {
                 this.form.headers.splice(index, 1);
             }
+        },
+        mounted () {
+            if (this.$route.params.id) {
+                this.load(this.$route.params.id);
+            }
+            this.loadCats(this.$route.query.pro_id);
         }
     }
 </script>

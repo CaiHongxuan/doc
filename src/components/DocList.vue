@@ -12,8 +12,12 @@
                 </el-col>
                 <el-col :span="12">
                     <el-button size="small" @click="dialogform.dialogFormVisible = true">新增目录</el-button>
-                    <el-button size="small">新增普通文档</el-button>
-                    <el-button size="small">新增接口文档</el-button>
+                    <router-link :to="{path:'/add', query:{type:2, pro_id:$route.params.id}}">
+                        <el-button size="small">新增普通文档</el-button>
+                    </router-link>
+                    <router-link :to="{path:'/add', query:{type:1, pro_id:$route.params.id}}">
+                        <el-button size="small">新增接口文档</el-button>
+                    </router-link>
                 </el-col>
             </el-row>
             <el-row class="table-field">
@@ -43,9 +47,11 @@
                         width="180">
                         <template slot-scope="scope">
                             <router-link :to="{path:'/detail/' + scope.row.id}">
-                                <el-button size="small" type="" plain>查看</el-button>
+                                <el-button size="small" plain>查看</el-button>
                             </router-link>
-                            <el-button size="small" type="" plain>编辑</el-button>
+                            <router-link :to="{path:'/add/' + scope.row.id, query:{pro_id:$route.params.id}}">
+                                <el-button size="small" plain>编辑</el-button>
+                            </router-link>
                         </template>
                     </el-table-column>
                 </el-table>
