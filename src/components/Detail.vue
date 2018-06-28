@@ -1,22 +1,22 @@
 <template>
 
-    <el-main>
-        <h1 class="title">文档详情</h1>
+    <el-container>
+        <el-main>
+            <h1 class="title">文档详情</h1>
 
-        <mavon-editor
-            v-model="content"
-            :subfield="false"
-            :editable="false"
-            defaultOpen="preview"
-            :toolbarsFlag="false"
-            :ishljs="true"
-            :navigation="true"
-        />
+            <mavon-editor
+                v-model="content"
+                :subfield="false"
+                :editable="false"
+                defaultOpen="preview"
+                :toolbarsFlag="false"
+                :ishljs="true"
+                :navigation="true"
+            />
 
-        <router-link :to="{name:'Index'}">
-            <el-button type="primary" class="reback">返回</el-button>
-        </router-link>
-    </el-main>
+            <el-button type="primary" class="reback" onclick="history.go(-1)">返回</el-button>
+        </el-main>
+    </el-container>
 
 </template>
 
@@ -27,7 +27,7 @@
         name: 'Detail',
         data () {
             return {
-                content: ""
+                content: "",
             }
         },
         methods: {
@@ -47,8 +47,8 @@
             }
         },
         mounted() {
-            store.commit('showSideBar');
             this.load(this.$route.params.id);
+            store.commit('showSideBar');
         },
         watch: {
             '$route' (to, from) {

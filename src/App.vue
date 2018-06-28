@@ -4,10 +4,10 @@
             <el-header v-show="this.$store.state.isShowNavBar">
                 <NavBar></NavBar>
             </el-header>
-            <el-container>
-                <SideBar v-show="this.$store.state.isShowSideBar"></SideBar>
+            <!-- <el-container> -->
+                <!-- <SideBar v-show="this.$store.state.isShowSideBar"></SideBar> -->
                 <router-view/>
-            </el-container>
+            <!-- </el-container> -->
         </el-container>
     </div>
 </template>

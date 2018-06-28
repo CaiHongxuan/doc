@@ -10,12 +10,12 @@
         active-text-color="#ffd04b"
         show-timeout=0
     >
-        <el-submenu v-for="menu in menus" :key="menu.id" v-if="menu.children.length" :index="menu.id">
+        <el-submenu v-for="menu in menus" :key="menu.id" v-if="menu.children && menu.children.length" :index="menu.id">
             <template slot="title">
                 <i class="el-icon-document"></i>
                 <span>{{ menu.name }}</span>
             </template>
-            <el-submenu v-for="child in menu.children" :key="child.id" v-if="child.children.length" :index="child.id">
+            <el-submenu v-for="child in menu.children" :key="child.id" v-if="child.children && child.children.length" :index="child.id">
                 <template slot="title">
                     <i class="el-icon-document"></i>
                     <span>{{ child.name }}</span>
@@ -97,7 +97,7 @@
                     {
                         id:'7',
                         name:'消息中心',
-                        link:'/detail',
+                        link:'/doclist/1',
                         children:[]
                     }
                 ]

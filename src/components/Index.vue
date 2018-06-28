@@ -124,6 +124,7 @@
             }
         },
         methods: {
+            // 加载项目列表
             load() {
                 let that = this;
                 that.$axios.get('/projects', {}).then(function(response){
@@ -138,12 +139,13 @@
                     console.log(response); // 发生异常错误时执行的代码
                 });
             },
+            // 新增项目
             addProject() {
                 let that = this;
                 that.$axios.post('/projects', that.form).then(function(response){
                     if (response.status == 200 && response.data.code == 0) {
-                        that.projects = response.data.data.data;
                         that.$message.success('新建成功');
+                        that.projects.push(response.data.data);
                     } else if (response.status === -404) {
                         that.$message.error(response.msg);
                     } else {

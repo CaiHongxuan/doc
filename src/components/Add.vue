@@ -1,7 +1,7 @@
 <template>
 
     <el-main>
-        <h1 class="title">新增编辑文档</h1>
+        <h1 class="title">新增/编辑文档</h1>
 
         <el-form :inline="true" label-position="left" :rules="rules" ref="form" :model="form">
             <el-row>
@@ -71,9 +71,7 @@
             />
 
             <el-form-item class="reback">
-                <router-link :to="{name:'Detail'}">
-                    <el-button type="primary">返回</el-button>
-                </router-link>
+                <el-button type="primary" onclick="history.go(-1)">返回</el-button>
                 <el-button type="primary" @click="submitForm('form')">立即创建</el-button>
                 <el-button @click="resetForm('form')">重置</el-button>
             </el-form-item>

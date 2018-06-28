@@ -40,7 +40,7 @@
         name: 'Parameters',
         props: {
             parameter: {
-                type: Object,
+                type: Object|Array,
                 required: true
             }
         },
