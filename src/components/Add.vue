@@ -5,20 +5,19 @@
         <h1 class="title" v-else>新增文档</h1>
 
         <el-form :inline="true" label-position="left" :rules="rules" ref="form" :model="form">
-            <el-row v-if="$route.query.type == 1">
+            <el-row v-if="docType == 1">
                 <el-form-item label="名称" prop="name">
-                    <el-input v-model="form.name" size="small"></el-input>
+                    <el-input v-model.trim="form.name" size="small"></el-input>
                 </el-form-item>
                 <el-form-item label="接口地址" prop="url">
-                    <el-input v-model="form.url" size="small"></el-input>
+                    <el-input v-model.trim="form.url" size="small"></el-input>
                 </el-form-item>
-                <el-form-item label="所属目录" prop="cats.parents">
+                <el-form-item label="所属目录" prop="parents">
                     <el-cascader
-                        :options="form.cats.options"
-                        v-model="form.cats.parents"
-                        :props="form.cats.props"
-                        filterable
-                        change-on-select>
+                        :options="form.casoptions"
+                        v-model="form.parents"
+                        :props="form.props"
+                        filterable>
                     </el-cascader>
                 </el-form-item>
                 <el-form-item label="序号" prop="sort">
@@ -27,25 +26,24 @@
             </el-row>
             <el-row v-else>
                 <el-form-item label="名称" prop="name">
-                    <el-input v-model="form.name" size="small"></el-input>
+                    <el-input v-model.trim="form.name" size="small"></el-input>
                 </el-form-item>
-                <el-form-item label="版本：">
-                    {{ form.version }}
-                </el-form-item>
-                <el-form-item label="所属目录">
+                <el-form-item label="所属目录" prop="parents">
                     <el-cascader
-                        :options="form.cats.options"
-                        v-model="form.cats.parents"
-                        :props="form.cats.props"
-                        filterable
-                        change-on-select>
+                        :options="form.casoptions"
+                        v-model="form.parents"
+                        :props="form.props"
+                        filterable>
                     </el-cascader>
                 </el-form-item>
                 <el-form-item label="序号" prop="sort">
                     <el-input v-model="form.sort" size="small"></el-input>
                 </el-form-item>
+                <el-form-item label="版本：">
+                    {{ form.version }}
+                </el-form-item>
             </el-row>
-            <el-row v-if="$route.query.type == 1">
+            <el-row v-if="docType == 1">
                 <el-form-item label="请求方式" prop="method">
                     <el-select v-model="form.method" placeholder="请选择请求方式"  size="small">
                         <el-option label="Any" value="0"></el-option>
@@ -69,7 +67,7 @@
                 </el-form-item>
             </el-row>
 
-            <el-tabs v-model="activeName" class="parameters_field" v-if="$route.query.type == 1">
+            <el-tabs v-model="activeName" class="parameters_field" v-if="docType == 1">
                 <el-tab-pane label="请求参数（Query）" name="parameters">
 
                     <parameters v-for="(parameter, index) in form.parameters" :parameter="parameter" v-on:changeItem="removeParaItem(index)"></parameters>
@@ -89,7 +87,7 @@
             </el-tabs>
 
             <mavon-editor
-                v-model="content"
+                v-model="form.content"
                 :subfield="true"
                 :editable="true"
                 :toolbarsFlag="true"
@@ -100,10 +98,10 @@
             />
 
             <el-form-item class="reback">
-                <el-button type="primary" onclick="history.go(-1)">返回</el-button>
+                <el-button type="primary" onclick="history.back()">返回</el-button>
                 <el-button @click="resetForm('form')">重置</el-button>
-                <el-button type="primary" @click="submitForm('form')" v-if="$route.params.id">提交更新</el-button>
-                <el-button type="primary" @click="submitForm('form')" v-else>立即创建</el-button>
+                <el-button type="primary" @click="submitFormForUpdate('form')" v-if="$route.params.id">提交更新</el-button>
+                <el-button type="primary" @click="submitFormForCreate('form')" v-else>立即创建</el-button>
             </el-form-item>
 
         </el-form>
@@ -123,8 +121,9 @@
         data () {
             return {
                 activeName: 'parameters',
-                content: '',
+                docType: 2, // 文档类型
                 form: {
+                    id: 0,
                     name: '',
                     url: '',
                     sort: 99,
@@ -133,14 +132,13 @@
                     version: 1,
                     parameters: [],
                     headers: [],
-                    cats: {
-                        parents: [],
-                        props: {
-                            value: 'id',
-                            label: 'name'
-                        },
-                        options: [],
-                    }
+                    content: '',
+                    parents: [],
+                    props: {
+                        value: 'id',
+                        label: 'name'
+                    },
+                    casoptions: [],
                 },
                 // 验证规则
                 rules: {
@@ -170,14 +168,18 @@
                 that.$axios.get('/docs/' + id, {}).then(function(response){
                     if (response.status == 200 && response.data.code == 0) {
                         let resData = response.data.data;
-                        that.content = resData.content;
+                        console.log(resData);
+                        that.docType = resData.type;
+                        that.form.id = resData.id;
+                        that.form.content = resData.content;
                         that.form.name = resData.title;
                         that.form.url = resData.url;
                         that.form.method = ''+resData.method;
                         that.form.status = ''+resData.status;
                         that.form.version = resData.version;
-                        that.form.parameters = resData.arguments;
-                        that.form.headers = resData.arguments;
+                        that.form.parents = resData.cat_ids.split(',');
+                        that.form.parameters = JSON.parse(resData.arguments)['parameters'];
+                        that.form.headers = JSON.parse(resData.arguments)['headers'];
                     } else if (response.status === -404) {
                         that.$message.error(response.msg);
                     } else {
@@ -192,7 +194,7 @@
                 let that = this;
                 that.$axios.get('/catalogs', {pro_id:projectId}).then(function(response){
                     if (response.status == 200 && response.data.code == 0) {
-                        that.form.cats.options = response.data.data;
+                        that.form.casoptions = response.data.data;
                     } else if (response.status === -404) {
                         that.$message.error(response.msg);
                     } else {
@@ -205,7 +207,7 @@
             // 保存文件
             save() {
                 var urlObject = window.URL || window.webkitURL || window;
-                var downloadData = new Blob([this.content]);
+                var downloadData = new Blob([this.form.content]);
                 var save_link = document.createElementNS("http://www.w3.org/1999/xhtml", "a")
                 save_link.href = urlObject.createObjectURL(downloadData);
                 console.log(save_link, save_link.href);
@@ -217,25 +219,70 @@
                 );
                 save_link.dispatchEvent(ev);
             },
-            // 提交表单
-            submitForm(formName) {
+            // 提交表单（创建文档）
+            submitFormForCreate(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        //
-                        // todo 表单提交
-                        //
                         let that = this;
                         let data = {
                             title: that.form.name,
                             type: that.$route.query.type,
                             method: that.form.method,
-                            arguments: that.form.name,
-                            content: that.content,
-                            cat_id: that.form.cats.parents[that.form.cats.parents.length - 1],
+                            arguments: JSON.stringify({
+                                parameters: that.form.parameters,
+                                headers: that.form.headers
+                            }),
+                            content: that.form.content,
+                            cat_id: that.form.parents[that.form.parents.length - 1],
                             sort: that.form.sort
                         };
-                        console.log(data);
-                        alert('submit!');
+                        that.$axios.post('/docs', data).then(function(response){
+                            if (response.status == 200 && response.data.code == 0) {
+                                that.$message.success('新建成功');
+                                history.back();
+                            } else if (response.status === -404) {
+                                that.$message.error(response.msg);
+                            } else {
+                                that.$message.error(response.data.msg);
+                            }
+                        }).catch(function(response){
+                            console.log(response); // 发生异常错误时执行的代码
+                        });
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+            // 提交表单（更新文档）
+            submitFormForUpdate(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        let that = this;
+                        let data = {
+                            title: that.form.name,
+                            type: that.$route.query.type,
+                            method: that.form.method,
+                            arguments: JSON.stringify({
+                                parameters: that.form.parameters,
+                                headers: that.form.headers
+                            }),
+                            content: that.form.content,
+                            cat_id: that.form.parents[that.form.parents.length - 1],
+                            sort: that.form.sort
+                        };
+                        that.$axios.put('/docs/' + that.form.id, data).then(function(response){
+                            if (response.status == 200 && response.data.code == 0) {
+                                that.$message.success('更新成功');
+                                history.back();
+                            } else if (response.status === -404) {
+                                that.$message.error(response.msg);
+                            } else {
+                                that.$message.error(response.data.msg);
+                            }
+                        }).catch(function(response){
+                            console.log(response); // 发生异常错误时执行的代码
+                        });
                     } else {
                         console.log('error submit!!');
                         return false;
