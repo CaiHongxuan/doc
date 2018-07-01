@@ -129,7 +129,7 @@
                     sort: 99,
                     method: '1',
                     status: '0',
-                    version: 1,
+                    version: '1.0',
                     parameters: [],
                     headers: [],
                     content: '',
@@ -163,12 +163,11 @@
         },
         methods: {
             // 加载文档详情
-            load(id) {
+            loadDoc(id) {
                 let that = this;
                 that.$axios.get('/docs/' + id, {}).then(function(response){
                     if (response.status == 200 && response.data.code == 0) {
                         let resData = response.data.data;
-                        console.log(resData);
                         that.docType = resData.type;
                         that.form.id = resData.id;
                         that.form.content = resData.content;
@@ -177,7 +176,7 @@
                         that.form.method = ''+resData.method;
                         that.form.status = ''+resData.status;
                         that.form.version = resData.version;
-                        that.form.parents = resData.cat_ids.split(',');
+                        that.form.parents = JSON.parse(resData.cat_ids);
                         that.form.parameters = JSON.parse(resData.arguments)['parameters'];
                         that.form.headers = JSON.parse(resData.arguments)['headers'];
                     } else if (response.status === -404) {
@@ -210,8 +209,7 @@
                 var downloadData = new Blob([this.form.content]);
                 var save_link = document.createElementNS("http://www.w3.org/1999/xhtml", "a")
                 save_link.href = urlObject.createObjectURL(downloadData);
-                console.log(save_link, save_link.href);
-                save_link.download = "文档.md";
+                save_link.download = (this.form.name ? this.form.name : "文档") + ".md";
                 var ev = document.createEvent("MouseEvents");
                 ev.initMouseEvent(
                     "click", true, false, window, 0, 0, 0, 0, 0
@@ -226,14 +224,15 @@
                         let that = this;
                         let data = {
                             title: that.form.name,
-                            type: that.$route.query.type,
+                            type: that.docType,
+                            url: that.form.url,
                             method: that.form.method,
                             arguments: JSON.stringify({
                                 parameters: that.form.parameters,
                                 headers: that.form.headers
                             }),
                             content: that.form.content,
-                            cat_id: that.form.parents[that.form.parents.length - 1],
+                            cat_ids: that.form.parents,
                             sort: that.form.sort
                         };
                         that.$axios.post('/docs', data).then(function(response){
@@ -261,14 +260,15 @@
                         let that = this;
                         let data = {
                             title: that.form.name,
-                            type: that.$route.query.type,
+                            type: that.docType,
+                            url: that.form.url,
                             method: that.form.method,
                             arguments: JSON.stringify({
                                 parameters: that.form.parameters,
                                 headers: that.form.headers
                             }),
                             content: that.form.content,
-                            cat_id: that.form.parents[that.form.parents.length - 1],
+                            cat_ids: that.form.parents,
                             sort: that.form.sort
                         };
                         that.$axios.put('/docs/' + that.form.id, data).then(function(response){
@@ -322,9 +322,10 @@
         },
         mounted () {
             if (this.$route.params.id) {
-                this.load(this.$route.params.id);
+                this.loadDoc(this.$route.params.id);
             }
             this.loadCats(this.$route.query.pro_id);
+            this.docType = this.$route.query.type;
         }
     }
 </script>

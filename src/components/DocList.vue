@@ -37,8 +37,8 @@
                         width="180">
                     </el-table-column>
                     <el-table-column
-                        prop="created_at"
-                        label="创建时间"
+                        prop="updated_at"
+                        label="更新时间"
                         width="180">
                     </el-table-column>
                     <el-table-column
@@ -179,12 +179,12 @@
                     name: that.dialogform.name,
                     parent_ids: that.dialogform.parents,
                     sort: that.dialogform.sort,
-                    pro_id: this.$route.params.id
+                    pro_id: that.$route.params.id
                 };
                 that.$axios.post('/catalogs', data).then(function(response){
                     if (response.status == 200 && response.data.code == 0) {
                         that.$message.success('新建成功');
-                        that.loadCats();
+                        that.loadCats(that.$route.params.id);
                     } else if (response.status === -404) {
                         that.$message.error(response.msg);
                     } else {
