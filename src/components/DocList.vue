@@ -133,7 +133,7 @@
             // 加载侧边栏目录
             loadCats (projectId) {
                 let that = this;
-                that.$axios.get('/catalogs', {pro_id:projectId}).then(function(response){
+                that.$axios.get('/catalogs', {pro_id:projectId, docs:true}).then(function(response){
                     if (response.status == 200 && response.data.code == 0) {
                         that.sidebars = response.data.data;
                         // 采用JSON.parse与JSON.stringify防止浅拷贝
