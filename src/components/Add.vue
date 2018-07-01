@@ -17,7 +17,8 @@
                         :options="form.casoptions"
                         v-model="form.parents"
                         :props="form.props"
-                        filterable>
+                        filterable
+                        change-on-select>
                     </el-cascader>
                 </el-form-item>
                 <el-form-item label="序号" prop="sort">
@@ -33,7 +34,8 @@
                         :options="form.casoptions"
                         v-model="form.parents"
                         :props="form.props"
-                        filterable>
+                        filterable
+                        change-on-select>
                     </el-cascader>
                 </el-form-item>
                 <el-form-item label="序号" prop="sort">
