@@ -1,8 +1,8 @@
 <template>
 
     <el-container>
-        <SideBar v-show="this.$store.state.isShowSideBar" :sidebars="sidebars" @loadDocs="setCatAndLoadDocs"></SideBar>
-        <el-main>
+        <SideBar v-show="this.$store.state.isShowSideBar" :sidebars="sidebars" @loadDoc="loadDoc" @loadDocs="setCatAndLoadDocs"></SideBar>
+        <el-main v-show="showList">
             <h1 class="title">文档列表</h1>
             <el-row :gutter="16">
                 <el-col :span="12">
@@ -92,6 +92,21 @@
                 </div>
             </el-dialog>
         </el-main>
+        <el-main v-show="!showList">
+            <h1 class="title">文档详情</h1>
+
+            <mavon-editor
+                v-model="content"
+                :subfield="false"
+                :editable="false"
+                defaultOpen="preview"
+                :toolbarsFlag="false"
+                :ishljs="true"
+                :navigation="true"
+            />
+
+            <el-button type="primary" class="reback" @click="showList = !showList">返回</el-button>
+        </el-main>
 </el-container>
 
 </template>
@@ -109,6 +124,8 @@
             return {
                 cat_id: 0,
                 sidebars: [],
+                showList: true,
+                content: '',
                 tableData: {
                     total: 0,
                     per_size: 15,
@@ -148,9 +165,26 @@
                     console.log(response); // 发生异常错误时执行的代码
                 });
             },
+            // 加载文档详情
+            loadDoc (doc_id) {
+                let that = this;
+                that.showList = false;
+                that.$axios.get('/docs/' + doc_id, {}).then(function(response){
+                    if (response.status == 200 && response.data.code == 0) {
+                        that.content = response.data.data.content;
+                    } else if (response.status === -404) {
+                        that.$message.error(response.msg);
+                    } else {
+                        that.$message.error(response.data.msg);
+                    }
+                }).catch(function(response){
+                    console.log(response); // 发生异常错误时执行的代码
+                });
+            },
             // 加载文档列表
             loadDocs (page) {
                 let that = this;
+                that.showList = true;
                 that.$axios.get('/docs', {cat_id:that.cat_id, page:page}).then(function(response){
                     if (response.status == 200 && response.data.code == 0) {
                         that.tableData.content = response.data.data.data;
@@ -204,11 +238,15 @@
     }
 </script>
 
-<style>
+<style scoped>
     .table-field {
         margin: 15px 0px;
     }
     .pagination-field {
         text-align: center;
+    }
+    .reback {
+        margin-top: 15px;
+        float: right;
     }
 </style>

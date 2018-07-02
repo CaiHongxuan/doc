@@ -2,27 +2,39 @@
 
     <el-aside>
         <el-menu :default-openeds="openeds">
+            <el-menu-item v-for="doc in sidebars.docs" v-if="sidebars.docs && sidebars.docs.length" :key="'doc_' + doc.id" :index="'doc_'+doc.id" @click="loadDoc(doc.id)">
+                <i class="el-icon-document"></i>{{ doc.title }}
+            </el-menu-item>
             <el-submenu v-for="sidebar in sidebars" v-if="sidebar.children && sidebar.children.length" :key="sidebar.id" :index="''+sidebar.id">
                 <template slot="title"><i class="el-icon-message"></i>{{ sidebar.name }}</template>
+                <el-menu-item v-for="doc in sidebar.docs" v-if="sidebar.docs && sidebar.docs.length" :key="'doc_' + doc.id" :index="'doc_'+doc.id" @click="loadDoc(doc.id)">
+                    <i class="el-icon-document"></i>{{ doc.title }}
+                </el-menu-item>
                 <el-submenu v-for="child in sidebar.children" v-if="child.children && child.children.length" :key="child.id" :index="''+child.id">
                     <template slot="title"><i class="el-icon-message"></i>{{ child.name }}</template>
 
+                    <el-menu-item v-for="doc in child.docs" v-if="child.docs && child.docs.length" :key="'doc_' + doc.id" :index="'doc_'+doc.id" @click="loadDoc(doc.id)">
+                        <i class="el-icon-document"></i>{{ doc.title }}
+                    </el-menu-item>
                     <el-submenu v-for="item in child.children" v-if="item.children && item.children.length" :key="item.id" :index="''+item.id">
                         <template slot="title"><i class="el-icon-message"></i>{{ item.name }}</template>
+                        <el-menu-item v-for="doc in item.docs" v-if="item.docs && item.docs.length" :key="'doc_' + doc.id" :index="'doc_'+doc.id" @click="loadDoc(doc.id)">
+                            <i class="el-icon-document"></i>{{ doc.title }}
+                        </el-menu-item>
                         <el-menu-item v-for="single in item.children" :key="single.id" :index="''+single.id" @click="loadDocs(single.id)">
-                            <i class="el-icon-document"></i>{{ single.name }}
+                            <i class="el-icon-message"></i>{{ single.name }}
                         </el-menu-item>
                     </el-submenu>
                     <el-menu-item v-else :key="item.id" :index="''+item.id" @click="loadDocs(item.id)">
-                        <i class="el-icon-document"></i>{{ item.name }}
+                        <i class="el-icon-message"></i>{{ item.name }}
                     </el-menu-item>
                 </el-submenu>
                 <el-menu-item v-else :key="child.id" :index="''+child.id" @click="loadDocs(child.id)">
-                    <i class="el-icon-document"></i>{{ child.name }}
+                    <i class="el-icon-message"></i>{{ child.name }}
                 </el-menu-item>
             </el-submenu>
             <el-menu-item v-else :key="sidebar.id" :index="''+sidebar.id" @click="loadDocs(sidebar.id)">
-                <i class="el-icon-document"></i>{{ sidebar.name }}
+                <i class="el-icon-message"></i>{{ sidebar.name }}
             </el-menu-item>
         </el-menu>
     </el-aside>
@@ -44,6 +56,9 @@
             }
         },
         methods: {
+            loadDoc (doc_id) {
+                this.$emit('loadDoc', doc_id);
+            },
             loadDocs (cat_id) {
                 this.$emit('loadDocs', cat_id);
             }

@@ -55,7 +55,7 @@
     }
 </script>
 
-<style>
+<style scoped>
     .reback {
         margin-top: 15px;
         float: right;
