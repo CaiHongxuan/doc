@@ -196,6 +196,8 @@
                 that.$axios.get('/catalogs', {pro_id:projectId}).then(function(response){
                     if (response.status == 200 && response.data.code == 0) {
                         that.form.casoptions = response.data.data;
+                        that.sidebars = response.data.data;
+                        that.form.casoptions.unshift({id: 0, name:"顶级目录"});
                     } else if (response.status === -404) {
                         that.$message.error(response.msg);
                     } else {
@@ -234,6 +236,7 @@
                                 headers: that.form.headers
                             }),
                             content: that.form.content,
+                            pro_id: that.$route.query.pro_id,
                             cat_ids: that.form.parents,
                             sort: that.form.sort
                         };
@@ -270,6 +273,7 @@
                                 headers: that.form.headers
                             }),
                             content: that.form.content,
+                            pro_id: that.$route.query.pro_id,
                             cat_ids: that.form.parents,
                             sort: that.form.sort
                         };
