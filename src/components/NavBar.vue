@@ -70,7 +70,7 @@
                             {
                                 id:'3',
                                 name:'开发规范',
-                                link:'/add',
+                                link:'/add?pro_id=1',
                                 children:[]
                             },
                             {

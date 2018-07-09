@@ -19,7 +19,7 @@
                     <el-col :span="4" v-for="item in projects" :key="item.id" class="card">
                         <router-link :to="{path:'/doclist/' + item.id}">
                             <el-card shadow="always">
-                                <img :src="item.icon" class="image">
+                                <img :src="'/static/img/bg-' + (item.id % 2 + 1) + '.gif'" class="image">
                                 <div>
                                     <h4 class="title">{{ item.name }}</h4>
                                     <span class="desc">{{ item.desc }}</span>
@@ -69,50 +69,7 @@
         data () {
             return {
                 msg: 'Welcome to Your Vue.js App',
-                projects: [
-                    {
-                        id: 1,
-                        name: "项目1",
-                        desc: "简介1啥地方是否斯蒂芬斯蒂芬是多少斯蒂芬斯蒂芬",
-                        created_at: "2018-06-20 21:32:04",
-                        icon: "/static/favicon.ico"
-                    },
-                    {
-                        id: 2,
-                        name: "项目2",
-                        desc: "简介2威尔士范德萨的发生的发生松岛枫松岛枫",
-                        created_at: "2018-06-20 21:32:04",
-                        icon: "/static/favicon.ico"
-                    },
-                    {
-                        id: 3,
-                        name: "项目3",
-                        desc: "简介3松岛枫松岛枫微服务打发斯蒂芬",
-                        created_at: "2018-06-20 21:32:04",
-                        icon: "/static/favicon.ico"
-                    },
-                    {
-                        id: 4,
-                        name: "项目4",
-                        desc: "简介4盛世嫡妃方位服务发斯蒂芬斯蒂芬速度发斯蒂芬斯蒂芬的",
-                        created_at: "2018-06-20 21:32:04",
-                        icon: "/static/favicon.ico"
-                    },
-                    {
-                        id: 5,
-                        name: "项目5",
-                        desc: "简介5额外热温柔温柔温柔温柔是法国的法国大 个方法是否收到",
-                        created_at: "2018-06-20 21:32:04",
-                        icon: "/static/favicon.ico"
-                    },
-                    {
-                        id: 6,
-                        name: "项目6",
-                        desc: "简介6尾而对方告诉对方广东分公司的风格的风格的风格的风格 该责任",
-                        created_at: "2018-06-20 21:32:04",
-                        icon: "/static/favicon.ico"
-                    },
-                ],
+                projects: [],
                 dialogFormVisible: false,
                 form: {
                     name: '',
@@ -188,6 +145,7 @@
     }
     .image {
         width: 100%;
+        max-height: 180px;
         display: block;
     }
     .clearfix:before,
