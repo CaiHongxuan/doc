@@ -7,7 +7,7 @@
             <el-form :inline="true" label-position="left">
                 <el-row>
                     <el-form-item label="接口地址：" v-if="type == 1">
-                        <pre>{{ url }}</pre>
+                        {{ url }}
                     </el-form-item>
                     <el-form-item label="请求方式：" v-if="type == 1">
                         {{ method }}
