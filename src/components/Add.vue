@@ -170,6 +170,7 @@
                 that.$axios.get('/docs/' + id, {}).then(function(response){
                     if (response.status == 200 && response.data.code == 0) {
                         let resData = response.data.data;
+                        let argument = resData.arguments ? JSON.parse(resData.arguments) : [];
                         that.docType = resData.type;
                         that.form.id = resData.id;
                         that.form.content = resData.content;
@@ -179,8 +180,8 @@
                         that.form.status = ''+resData.status;
                         that.form.version = resData.version;
                         that.form.parents = JSON.parse(resData.cat_ids);
-                        that.form.parameters = JSON.parse(resData.arguments)['parameters'];
-                        that.form.headers = JSON.parse(resData.arguments)['headers'];
+                        that.form.parameters = argument['parameters'] ? argument['parameters'] : [];
+                        that.form.headers = argument['headers'] ? argument['headers'] : [];
                     } else if (response.status === -404) {
                         that.$message.error(response.msg);
                     } else {
@@ -195,8 +196,9 @@
                 let that = this;
                 that.$axios.get('/catalogs', {pro_id:projectId}).then(function(response){
                     if (response.status == 200 && response.data.code == 0) {
-                        that.form.casoptions = response.data.data;
                         that.sidebars = response.data.data;
+                        // 采用JSON.parse与JSON.stringify防止浅拷贝
+                        that.form.casoptions = JSON.parse(JSON.stringify(response.data.data));
                         that.form.casoptions.unshift({id: 0, name:"顶级目录"});
                     } else if (response.status === -404) {
                         that.$message.error(response.msg);
