@@ -154,7 +154,7 @@
                     if (response.status == 200 && response.data.code == 0) {
                         that.sidebars = response.data.data;
                         // 采用JSON.parse与JSON.stringify防止浅拷贝
-                        that.dialogform.options = JSON.parse(JSON.stringify(response.data.data));
+                        that.dialogform.options = JSON.parse(JSON.stringify(response.data.data.cats));
                         that.dialogform.options.unshift({id: 0, name:"顶级目录"});
                     } else if (response.status === -404) {
                         that.$message.error(response.msg);
