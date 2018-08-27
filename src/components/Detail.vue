@@ -12,6 +12,8 @@
                     <el-form-item label="请求方式：" v-if="type == 1">
                         {{ method }}
                     </el-form-item>
+                </el-row>
+                <el-row>
                     <el-form-item label="开发状态：" v-if="type == 1">
                         {{ status }}
                     </el-form-item>

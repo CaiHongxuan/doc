@@ -12,7 +12,6 @@
                 </el-menu-item>
                 <el-submenu v-for="child in sidebar.children" v-if="(child.children && child.children.length) || (child.docs && child.docs.length)" :key="child.id" :index="''+child.id">
                     <template slot="title"><i class="el-icon-message"></i>{{ child.name }}</template>
-
                     <el-menu-item v-for="doc in child.docs" v-if="child.docs && child.docs.length" :key="'doc_' + doc.id" :index="'doc_'+doc.id" @click="loadDoc(doc.id)">
                         <i class="el-icon-document"></i>{{ doc.title }}
                     </el-menu-item>
