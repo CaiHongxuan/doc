@@ -1,7 +1,7 @@
 <template>
 
     <el-aside>
-        <el-menu :default-openeds="openeds" @open="handleLoad" @close="handleLoad">
+        <el-menu :default-openeds="openeds" @open="handleLoad">
             <el-menu-item v-for="doc in sidebars.docs" v-if="sidebars.docs && sidebars.docs.length" :key="'doc_' + doc.id" :index="'doc_'+doc.id" @click="loadDoc(doc.id)">
                 <i class="el-icon-document"></i>{{ doc.title }}
             </el-menu-item>

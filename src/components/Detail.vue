@@ -7,7 +7,7 @@
             <el-form :inline="true" label-position="left">
                 <el-row>
                     <el-form-item label="接口地址：" v-if="type == 1">
-                        {{ url }}
+                        <code>{{ url }}</code>
                     </el-form-item>
                     <el-form-item label="请求方式：" v-if="type == 1">
                         {{ method }}
@@ -37,12 +37,12 @@
                                 width="180">
                             </el-table-column>
                             <el-table-column
-                                prop="is_must"
+                                prop="is_must_plan"
                                 label="是否必填"
                                 width="180">
                             </el-table-column>
                             <el-table-column
-                                prop="type"
+                                prop="type_plan"
                                 label="参数类型">
                             </el-table-column>
                             <el-table-column
@@ -63,12 +63,12 @@
                                 width="180">
                             </el-table-column>
                             <el-table-column
-                                prop="is_must"
+                                prop="is_must_plan"
                                 label="是否必填"
                                 width="180">
                             </el-table-column>
                             <el-table-column
-                                prop="type"
+                                prop="type_plan"
                                 label="参数类型">
                             </el-table-column>
                             <el-table-column
@@ -133,8 +133,8 @@
                         that.sort = response.data.data.sort;
                         that.created_by = response.data.data.created_by.name;
                         that.updated_at = response.data.data.updated_at;
-                        that.parameters = JSON.parse(response.data.data.arguments)['parameters'];
-                        that.headers = JSON.parse(response.data.data.arguments)['headers'];
+                        that.parameters = response.data.data.arguments['parameters'];
+                        that.headers = response.data.data.arguments['headers'];
                     } else if (response.status === -404) {
                         that.$message.error(response.msg);
                     } else {
