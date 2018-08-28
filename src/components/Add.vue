@@ -170,7 +170,7 @@
                 that.$axios.get('/docs/' + id, {}).then(function(response){
                     if (response.status == 200 && response.data.code == 0) {
                         let resData = response.data.data;
-                        let argument = resData.arguments ? JSON.parse(resData.arguments) : [];
+                        let argument = resData.arguments ? resData.arguments : [];
                         that.docType = resData.type;
                         that.form.id = resData.id;
                         that.form.content = resData.content;
