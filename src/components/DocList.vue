@@ -1,7 +1,9 @@
 <template>
 
     <el-container>
+
         <SideBar v-show="this.$store.state.isShowSideBar" :sidebars="sidebars" @loadDoc="loadDoc" @loadDocs="setCatAndLoadDocs"></SideBar>
+
         <el-main v-show="showList">
             <h1 class="title">文档列表</h1>
             <el-row :gutter="16">
@@ -92,33 +94,23 @@
                 </div>
             </el-dialog>
         </el-main>
-        <el-main v-show="!showList">
-            <h1 class="title">文档详情</h1>
 
-            <mavon-editor
-                v-model="content"
-                :subfield="false"
-                :editable="false"
-                defaultOpen="preview"
-                :toolbarsFlag="false"
-                :ishljs="true"
-                :navigation="true"
-            />
+        <DocListDetail v-show="!showList" :detail="detail"></DocListDetail>
 
-            <el-button type="primary" class="reback" @click="showList = !showList">返回</el-button>
-        </el-main>
-</el-container>
+    </el-container>
 
 </template>
 
 <script>
     import store from '../store/store'
     import SideBar from './SideBar.vue'
+    import DocListDetail from './DocListDetail.vue'
 
     export default {
         name: 'DocList',
         components: {
-            SideBar
+            SideBar,
+            DocListDetail
         },
         data () {
             return {
@@ -126,6 +118,21 @@
                 sidebars: [],
                 showList: true,
                 content: '',
+                detail: {
+                    type: "",
+                    title: "",
+                    content: "",
+                    url: "",
+                    status: "",
+                    method: "",
+                    version: "",
+                    sort: "",
+                    created_by: "",
+                    updated_at: "",
+                    activeName: 'parameters',
+                    parameters: [],
+                    headers: [],
+                },
                 tableData: {
                     total: 0,
                     per_size: 15,
@@ -171,7 +178,19 @@
                 that.showList = false;
                 that.$axios.get('/docs/' + doc_id, {}).then(function(response){
                     if (response.status == 200 && response.data.code == 0) {
-                        that.content = response.data.data.content;
+                        that.detail.content = response.data.data.content;
+                        that.detail.type = response.data.data.type;
+                        that.detail.title = response.data.data.title;
+                        that.detail.content = response.data.data.content;
+                        that.detail.url = response.data.data.url;
+                        that.detail.status = response.data.data.status_plan;
+                        that.detail.method = response.data.data.method_plan;
+                        that.detail.version = response.data.data.version;
+                        that.detail.sort = response.data.data.sort;
+                        that.detail.created_by = response.data.data.created_by.name;
+                        that.detail.updated_at = response.data.data.updated_at;
+                        that.detail.parameters = response.data.data.arguments['parameters'];
+                        that.detail.headers = response.data.data.arguments['headers'];
                     } else if (response.status === -404) {
                         that.$message.error(response.msg);
                     } else {
@@ -244,9 +263,5 @@
     }
     .pagination-field {
         text-align: center;
-    }
-    .reback {
-        margin-top: 15px;
-        float: right;
     }
 </style>
