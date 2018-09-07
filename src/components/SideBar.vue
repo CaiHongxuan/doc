@@ -2,6 +2,7 @@
 
     <el-aside>
         <el-menu :default-openeds="openeds" @open="handleLoad">
+            <el-input v-model="input" placeholder="输入关键字后按回车以搜索" @keyup.enter.native="loadCats"></el-input>
             <el-menu-item v-for="doc in sidebars.docs" v-if="sidebars.docs && sidebars.docs.length" :key="'doc_' + doc.id" :index="'doc_'+doc.id" @click="loadDoc(doc.id)">
                 <i class="el-icon-document"></i>{{ doc.title }}
             </el-menu-item>
@@ -51,15 +52,20 @@
         },
         data() {
             return {
-                openeds: []
+                openeds: [],
+                input: ''
             }
         },
         methods: {
-            loadDoc (doc_id) {
+            loadDoc(doc_id) {
                 this.$emit('loadDoc', doc_id);
             },
-            loadDocs (cat_id) {
+            loadDocs(cat_id) {
                 this.$emit('loadDocs', cat_id);
+            },
+            loadCats() {
+                this.$emit('loadCats', '', this.input);
+                this.input = '';
             },
             handleLoad(key, keyPath) {
                 this.loadDocs(key);
@@ -76,5 +82,8 @@
     }
     .is-active a {
         color: #409EFF;
+    }
+    .el-menu {
+        border-right: none;
     }
 </style>

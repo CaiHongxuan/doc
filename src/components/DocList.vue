@@ -2,7 +2,7 @@
 
     <el-container>
 
-        <SideBar v-show="this.$store.state.isShowSideBar" :sidebars="sidebars" @loadDoc="loadDoc" @loadDocs="setCatAndLoadDocs"></SideBar>
+        <SideBar v-show="this.$store.state.isShowSideBar" :sidebars="sidebars" @loadDoc="loadDoc" @loadDocs="setCatAndLoadDocs" @loadCats="loadCats"></SideBar>
 
         <el-main v-show="showList">
             <h1 class="title">文档列表</h1>
@@ -114,6 +114,7 @@
         },
         data () {
             return {
+                project_id: 0,
                 cat_id: 0,
                 sidebars: [],
                 showList: true,
@@ -155,9 +156,10 @@
         },
         methods: {
             // 加载侧边栏目录
-            loadCats (projectId) {
+            loadCats (projectId, query='') {
                 let that = this;
-                that.$axios.get('/catalogs', {pro_id:projectId, docs:true}).then(function(response){
+                projectId = projectId ? projectId : that.project_id;
+                that.$axios.get('/catalogs', {pro_id:projectId, docs:true, doc_name: query}).then(function(response){
                     if (response.status == 200 && response.data.code == 0) {
                         that.sidebars = response.data.data;
                         // 采用JSON.parse与JSON.stringify防止浅拷贝
@@ -250,6 +252,7 @@
             }
         },
         mounted () {
+            this.project_id = this.$route.params.id;
             this.loadCats(this.$route.params.id);
             this.setCatAndLoadDocs(sessionStorage.getItem('cat_id'));
             store.commit('showSideBar');
@@ -263,5 +266,14 @@
     }
     .pagination-field {
         text-align: center;
+    }
+    .el-aside {
+        border-right: 1px solid #e6e6e6;
+        height: calc(100% - 80px);
+        position: fixed;
+        overflow: auto;
+    }
+    .el-main {
+        margin-left: 300px;
     }
 </style>
