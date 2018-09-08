@@ -7,8 +7,8 @@
             <el-col :span="20" :offset="2">
                 <el-row :gutter="16">
                     <el-col :span="11" :offset="6">
-                        <el-input placeholder="请输入内容" class="input-with-select" size="small">
-                            <el-button slot="append" icon="el-icon-search">搜索文档</el-button>
+                        <el-input v-model="query" placeholder="请输入内容按回车搜索" class="input-with-select" size="small" @keyup.enter.native="load">
+                            <el-button slot="append" icon="el-icon-search" @click="load">搜索文档</el-button>
                         </el-input>
                     </el-col>
                     <el-col :span="7">
@@ -70,6 +70,7 @@
             return {
                 msg: 'Welcome to Your Vue.js App',
                 projects: [],
+                query: '',
                 dialogFormVisible: false,
                 form: {
                     name: '',
@@ -84,7 +85,7 @@
             // 加载项目列表
             load() {
                 let that = this;
-                that.$axios.get('/projects', {}).then(function(response){
+                that.$axios.get('/projects', {q: that.query}).then(function(response){
                     if (response.status == 200 && response.data.code == 0) {
                         that.projects = response.data.data.data;
                     } else if (response.status === -404) {
