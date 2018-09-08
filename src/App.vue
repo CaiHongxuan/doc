@@ -39,4 +39,17 @@
     .title {
         text-align: center;
     }
+    .el-header {
+        position: fixed;
+        top: 0px;
+        width: 100%;
+        z-index: 999;
+    }
+    .el-container {
+        position: fixed;
+        top: 60px;
+        width: 100%;
+        height: 100%;
+        padding-bottom: 80px;
+    }
 </style>

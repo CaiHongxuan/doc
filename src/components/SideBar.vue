@@ -3,6 +3,14 @@
     <el-aside>
         <el-menu :default-openeds="openeds" @open="handleLoad">
             <el-input v-model="input" placeholder="输入关键字后按回车以搜索" @keyup.enter.native="loadCats"></el-input>
+            <div class="new-bar">
+                <el-tooltip class="item" effect="dark" content="新建页面" placement="left">
+                    <i class="el-icon-plus"></i>
+                </el-tooltip>
+                <el-tooltip class="item" effect="dark" content="新建目录" placement="right">
+                    <i class="el-icon-message"></i>
+                </el-tooltip>
+            </div>
             <el-menu-item v-for="doc in sidebars.docs" v-if="sidebars.docs && sidebars.docs.length" :key="'doc_' + doc.id" :index="'doc_'+doc.id" @click="loadDoc(doc.id)">
                 <i class="el-icon-document"></i>{{ doc.title }}
             </el-menu-item>
@@ -85,5 +93,15 @@
     }
     .el-menu {
         border-right: none;
+    }
+    .new-bar {
+        margin-left: 190px;
+        font-size: 20px;
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
+    .new-bar i {
+        cursor: pointer;
+        margin-right: 15px;
     }
 </style>
