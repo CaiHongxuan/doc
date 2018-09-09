@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <el-container>
+        <el-container class="content">
             <el-header v-show="this.$store.state.isShowNavBar">
                 <NavBar></NavBar>
             </el-header>
@@ -34,7 +34,6 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         color: #2c3e50;
-        /*margin-top: 60px;*/
     }
     .title {
         text-align: center;
@@ -43,13 +42,15 @@
         position: fixed;
         top: 0px;
         width: 100%;
-        z-index: 999;
+        z-index: 2000;
+        padding: 0px;
     }
-    .el-container {
-        position: fixed;
-        top: 60px;
+    .el-container.content {
+        /*position: fixed;
+        top: 61px;*/
         width: 100%;
         height: 100%;
         padding-bottom: 80px;
+        margin-top: 61px;
     }
 </style>

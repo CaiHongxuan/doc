@@ -4,98 +4,100 @@
 
         <SideBar v-show="this.$store.state.isShowSideBar" :sidebars="sidebars" @loadDoc="loadDoc" @loadDocs="setCatAndLoadDocs" @loadCats="loadCats"></SideBar>
 
-        <el-main v-show="showList">
-            <h1 class="title">文档列表</h1>
-            <el-row :gutter="16">
-                <el-col :span="12">
-                    <el-input placeholder="请输入内容" class="input-with-select" size="small">
-                        <el-button slot="append" icon="el-icon-search">搜索文档</el-button>
-                    </el-input>
-                </el-col>
-                <el-col :span="12">
-                    <el-button size="small" @click="dialogform.dialogFormVisible = true">新增目录</el-button>
-                    <router-link :to="{path:'/add', query:{type:2, pro_id:$route.params.id}}">
-                        <el-button size="small">新增普通文档</el-button>
-                    </router-link>
-                    <router-link :to="{path:'/add', query:{type:1, pro_id:$route.params.id}}">
-                        <el-button size="small">新增接口文档</el-button>
-                    </router-link>
-                </el-col>
-            </el-row>
-            <el-row class="table-field">
-                <el-table
-                    :data="tableData.content"
-                    border
-                    style="width: 100%">
-                    <el-table-column
-                        prop="title"
-                        label="接口名称"
-                        fixed="left"
-                        min-width="500">
-                    </el-table-column>
-                    <el-table-column
-                        prop="updated_by.name"
-                        label="最后更新者"
-                        width="180">
-                    </el-table-column>
-                    <el-table-column
-                        prop="updated_at"
-                        label="更新时间"
-                        width="180">
-                    </el-table-column>
-                    <el-table-column
-                        fixed="right"
-                        label="操作"
-                        width="180">
-                        <template slot-scope="scope">
-                            <router-link :to="{path:'/detail/' + scope.row.id}">
-                                <el-button size="small" plain>查看</el-button>
-                            </router-link>
-                            <router-link :to="{path:'/add/' + scope.row.id, query:{pro_id:$route.params.id}}">
-                                <el-button size="small" plain>编辑</el-button>
-                            </router-link>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </el-row>
-            <el-row>
-                <el-pagination
-                    background
-                    layout="prev, pager, next"
-                    @current-change="loadDocs"
-                    class="pagination-field"
-                    :page-size="tableData.per_size"
-                    :total="tableData.total">
-                </el-pagination>
-            </el-row>
+        <div class="right-side">
+            <el-main v-show="showList">
+                <h1 class="title">文档列表</h1>
+                <el-row :gutter="16">
+                    <el-col :span="12">
+                        <el-input v-model="doc_name" placeholder="请输入内容" class="input-with-select" size="small" @keyup.enter.native="loadDocs(1)">
+                            <el-button slot="append" icon="el-icon-search" @click="loadDocs(1)">搜索文档</el-button>
+                        </el-input>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-button size="small" @click="dialogform.dialogFormVisible = true">新增目录</el-button>
+                        <router-link :to="{path:'/add', query:{type:2, pro_id:$route.params.id}}">
+                            <el-button size="small">新增普通文档</el-button>
+                        </router-link>
+                        <router-link :to="{path:'/add', query:{type:1, pro_id:$route.params.id}}">
+                            <el-button size="small">新增接口文档</el-button>
+                        </router-link>
+                    </el-col>
+                </el-row>
+                <el-row class="table-field">
+                    <el-table
+                        :data="tableData.content"
+                        border
+                        style="width: 100%">
+                        <el-table-column
+                            prop="title"
+                            label="接口名称"
+                            fixed="left"
+                            min-width="500">
+                        </el-table-column>
+                        <el-table-column
+                            prop="updated_by.name"
+                            label="最后更新者"
+                            width="180">
+                        </el-table-column>
+                        <el-table-column
+                            prop="updated_at"
+                            label="更新时间"
+                            width="180">
+                        </el-table-column>
+                        <el-table-column
+                            fixed="right"
+                            label="操作"
+                            width="180">
+                            <template slot-scope="scope">
+                                <router-link :to="{path:'/detail/' + scope.row.id}">
+                                    <el-button size="small" plain>查看</el-button>
+                                </router-link>
+                                <router-link :to="{path:'/add/' + scope.row.id, query:{pro_id:$route.params.id}}">
+                                    <el-button size="small" plain>编辑</el-button>
+                                </router-link>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-row>
+                <el-row>
+                    <el-pagination
+                        background
+                        layout="prev, pager, next"
+                        @current-change="loadDocs"
+                        class="pagination-field"
+                        :page-size="tableData.per_size"
+                        :total="tableData.total">
+                    </el-pagination>
+                </el-row>
 
 
-            <el-dialog title="新增目录" :visible.sync="dialogform.dialogFormVisible" :width="dialogform.dialogWidth">
-                <el-form :model="dialogform">
-                    <el-form-item label="上级目录" :label-width="dialogform.formLabelWidth">
-                        <el-cascader
-                            :options="dialogform.options"
-                            v-model="dialogform.parents"
-                            :props="dialogform.props"
-                            filterable
-                            change-on-select>
-                        </el-cascader>
-                    </el-form-item>
-                    <el-form-item label="目录名称" :label-width="dialogform.formLabelWidth">
-                        <el-input v-model="dialogform.name" auto-complete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="序号" :label-width="dialogform.formLabelWidth">
-                        <el-input v-model="dialogform.sort" auto-complete="off"></el-input>
-                    </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="dialogform.dialogFormVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="addCat">确 定</el-button>
-                </div>
-            </el-dialog>
-        </el-main>
+                <el-dialog title="新增目录" :visible.sync="dialogform.dialogFormVisible" :width="dialogform.dialogWidth">
+                    <el-form :model="dialogform">
+                        <el-form-item label="上级目录" :label-width="dialogform.formLabelWidth">
+                            <el-cascader
+                                :options="dialogform.options"
+                                v-model="dialogform.parents"
+                                :props="dialogform.props"
+                                filterable
+                                change-on-select>
+                            </el-cascader>
+                        </el-form-item>
+                        <el-form-item label="目录名称" :label-width="dialogform.formLabelWidth">
+                            <el-input v-model="dialogform.name" auto-complete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="序号" :label-width="dialogform.formLabelWidth">
+                            <el-input v-model="dialogform.sort" auto-complete="off"></el-input>
+                        </el-form-item>
+                    </el-form>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click="dialogform.dialogFormVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="addCat">确 定</el-button>
+                    </div>
+                </el-dialog>
+            </el-main>
 
-        <DocListDetail v-show="!showList" :detail="detail"></DocListDetail>
+            <DocListDetail v-show="!showList" :detail="detail"></DocListDetail>
+        </div>
 
     </el-container>
 
@@ -119,6 +121,7 @@
                 sidebars: [],
                 showList: true,
                 content: '',
+                doc_name: '',
                 detail: {
                     type: "",
                     title: "",
@@ -206,7 +209,8 @@
             loadDocs (page) {
                 let that = this;
                 that.showList = true;
-                that.$axios.get('/docs', {cat_id:that.cat_id, page:page}).then(function(response){
+                page = page ? page : 1;
+                that.$axios.get('/docs', {cat_id:that.cat_id, page:page, doc_name:that.doc_name}).then(function(response){
                     if (response.status == 200 && response.data.code == 0) {
                         that.tableData.content = response.data.data.data;
                         that.tableData.total = response.data.data.total;
@@ -274,6 +278,13 @@
         overflow: auto;
     }
     .el-main {
+        max-width: 1600px;
+        margin: 0 auto;
+        min-width: 800px;
+    }
+    .right-side {
         margin-left: 300px;
+        width: 100%;
+        overflow: auto;
     }
 </style>
