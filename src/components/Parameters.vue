@@ -29,7 +29,7 @@
         </el-col>
         <el-col :span="1">
             <el-form-item>
-                <i class="el-icon-error remove" @click="removeItem"></i>
+                <i class="el-icon-error el-button--text remove" @click="removeItem"></i>
             </el-form-item>
         </el-col>
     </el-row>

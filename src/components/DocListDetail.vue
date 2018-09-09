@@ -90,6 +90,33 @@
         />
 
         <el-button type="primary" class="reback" onclick="history.go(-1)">返回</el-button>
+
+        <div class="page-bar">
+            <ul>
+                <li>
+                    <el-tooltip class="item" effect="dark" content="编辑页面" placement="left">
+                        <router-link :to="{path:'/add/' + detail.id, query:{pro_id:detail.pro_id}}">
+                            <el-button class="el-button--text" icon="el-icon-edit"></el-button>
+                        </router-link>
+                    </el-tooltip>
+                </li>
+                <li>
+                    <el-tooltip class="item" effect="dark" content="详情" placement="left">
+                        <el-button class="el-button--text" icon="el-icon-info" @click="docInfo"></el-button>
+                    </el-tooltip>
+                </li>
+                <li>
+                    <el-tooltip class="item" effect="dark" content="分享" placement="left">
+                        <el-button class="el-button--text" icon="el-icon-share" @click="share"></el-button>
+                    </el-tooltip>
+                </li>
+                <li>
+                    <el-tooltip class="item" effect="dark" content="删除此页面" placement="left">
+                        <el-button class="el-button--text" icon="el-icon-delete" @click="del"></el-button>
+                    </el-tooltip>
+                </li>
+            </ul>
+        </div>
     </el-main>
 </template>
 
@@ -118,6 +145,50 @@
                 parameters: [],
                 headers: [],
             }
+        },
+        methods: {
+            loadCats() {
+                this.$emit('loadCats', this.detail.pro_id);
+            },
+            docInfo() {
+                this.$alert('本页面由 ' + this.detail.updated_by + ' 于 ' + this.detail.updated_at + ' 更新', '', {
+                    confirmButtonText: '确定',
+                    center: true
+                });
+            },
+            share() {
+                this.$notify.warning({
+                    title: '通知',
+                    message: '分享功能暂未开通'
+                });
+            },
+            del() {
+                let that = this;
+                that.$confirm('此操作将永久删除文件《' + that.detail.title + '》, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    that.$axios.delete('/docs/' + that.detail.id, {}).then(function(response){
+                        if (response.status == 200 && response.data.code == 0) {
+                            that.loadCats();
+                            that.$message.success('删除成功!');
+                            location.reload();
+                        } else if (response.status === -404) {
+                            that.$message.error(response.msg);
+                        } else {
+                            that.$message.error(response.data.msg);
+                        }
+                    }).catch(function(response){
+                        console.log(response); // 发生异常错误时执行的代码
+                    });
+                }).catch(() => {
+                    that.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            }
         }
     }
 </script>
@@ -126,5 +197,14 @@
     .reback {
         margin-top: 15px;
         float: right;
+    }
+    .page-bar {
+        position: fixed;
+        top: 100px;
+        right: 10px;
+        width: 100px;
+    }
+    .page-bar ul li {
+        list-style: none;
     }
 </style>

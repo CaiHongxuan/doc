@@ -96,7 +96,7 @@
                 </el-dialog>
             </el-main>
 
-            <DocListDetail v-show="!showList" :detail="detail"></DocListDetail>
+            <DocListDetail v-show="!showList" :detail="detail" @loadCats="loadCats"></DocListDetail>
         </div>
 
     </el-container>
@@ -123,6 +123,7 @@
                 content: '',
                 doc_name: '',
                 detail: {
+                    id: "",
                     type: "",
                     title: "",
                     content: "",
@@ -133,6 +134,8 @@
                     sort: "",
                     created_by: "",
                     updated_at: "",
+                    updated_by: "",
+                    pro_id: "",
                     activeName: 'parameters',
                     parameters: [],
                     headers: [],
@@ -183,7 +186,7 @@
                 that.showList = false;
                 that.$axios.get('/docs/' + doc_id, {}).then(function(response){
                     if (response.status == 200 && response.data.code == 0) {
-                        that.detail.content = response.data.data.content;
+                        that.detail.id = response.data.data.id;
                         that.detail.type = response.data.data.type;
                         that.detail.title = response.data.data.title;
                         that.detail.content = response.data.data.content;
@@ -193,7 +196,9 @@
                         that.detail.version = response.data.data.version;
                         that.detail.sort = response.data.data.sort;
                         that.detail.created_by = response.data.data.created_by.name;
+                        that.detail.pro_id = response.data.data.pro_id;
                         that.detail.updated_at = response.data.data.updated_at;
+                        that.detail.updated_by = response.data.data.updated_by.name;
                         that.detail.parameters = response.data.data.arguments['parameters'];
                         that.detail.headers = response.data.data.arguments['headers'];
                     } else if (response.status === -404) {
