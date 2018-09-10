@@ -200,7 +200,7 @@
     }
     .page-bar {
         position: fixed;
-        top: 100px;
+        top: 120px;
         right: 10px;
         width: 100px;
     }

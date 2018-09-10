@@ -5,6 +5,10 @@
         <SideBar v-show="this.$store.state.isShowSideBar" :sidebars="sidebars" @loadDoc="loadDoc" @loadDocs="setCatAndLoadDocs" @loadCats="loadCats"></SideBar>
 
         <div class="right-side">
+            <router-link to="/">
+                <el-button class="reback" type="primary" plain icon="el-icon-arrow-left" @click="">返回项目</el-button>
+            </router-link>
+
             <el-main v-show="showList">
                 <h1 class="title">文档列表</h1>
                 <el-row :gutter="16">
@@ -69,7 +73,6 @@
                         :total="tableData.total">
                     </el-pagination>
                 </el-row>
-
 
                 <el-dialog title="新增目录" :visible.sync="dialogform.dialogFormVisible" :width="dialogform.dialogWidth">
                     <el-form :model="dialogform">
@@ -270,6 +273,10 @@
 </script>
 
 <style scoped>
+    .reback {
+        margin: 15px 15px 0 0px;
+        float: right;
+    }
     .table-field {
         margin: 15px 0px;
     }

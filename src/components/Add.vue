@@ -5,6 +5,12 @@
         <h1 class="title" v-else>新增文档</h1>
 
         <el-form :inline="true" label-position="left" :rules="rules" ref="form" :model="form">
+            <el-form-item class="reback">
+                <el-button type="primary" onclick="history.back()">返回</el-button>
+                <el-button @click="resetForm('form')">重置</el-button>
+                <el-button type="primary" @click="submitFormForUpdate('form')" v-if="$route.params.id">提交更新</el-button>
+                <el-button type="primary" @click="submitFormForCreate('form')" v-else>立即创建</el-button>
+            </el-form-item>
             <el-row v-if="docType == 1">
                 <el-form-item label="名称" prop="name">
                     <el-input v-model.trim="form.name" size="small"></el-input>
