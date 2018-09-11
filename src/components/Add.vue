@@ -12,6 +12,12 @@
                 <el-button type="primary" @click="submitFormForCreate('form')" v-else>立即创建</el-button>
             </el-form-item>
             <el-row v-if="docType == 1">
+                <el-form-item label="文档类型" prop="method">
+                    <el-select v-model="docType" placeholder="请选择文档类型"  size="small">
+                        <el-option label="接口文档" value="1"></el-option>
+                        <el-option label="普通文档" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="名称" prop="name">
                     <el-input v-model.trim="form.name" size="small"></el-input>
                 </el-form-item>
@@ -32,6 +38,12 @@
                 </el-form-item>
             </el-row>
             <el-row v-else>
+                <el-form-item label="文档类型" prop="method">
+                    <el-select v-model="docType" placeholder="请选择文档类型"  size="small">
+                        <el-option label="接口文档" value="1"></el-option>
+                        <el-option label="普通文档" value="2"></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="名称" prop="name">
                     <el-input v-model.trim="form.name" size="small"></el-input>
                 </el-form-item>
@@ -129,7 +141,7 @@
         data () {
             return {
                 activeName: 'parameters',
-                docType: 2, // 文档类型
+                docType: "2", // 文档类型：1接口文档，2普通文档
                 form: {
                     id: 0,
                     name: '',
@@ -355,6 +367,8 @@
     .reback {
         margin-top: 15px;
         float: right;
+        position: relative;
+        z-index: 1;
     }
     .mavon {
         min-height: 600px;

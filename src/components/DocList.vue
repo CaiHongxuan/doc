@@ -2,7 +2,7 @@
 
     <el-container>
 
-        <SideBar v-show="this.$store.state.isShowSideBar" :sidebars="sidebars" @loadDoc="loadDoc" @loadDocs="setCatAndLoadDocs" @loadCats="loadCats"></SideBar>
+        <SideBar v-show="this.$store.state.isShowSideBar" :sidebars="sidebars" @loadDoc="loadDoc" @loadDocs="setCatAndLoadDocs" @loadCats="loadCats" @showAddCat="dialogFormVisible"></SideBar>
 
         <div class="right-side">
             <router-link to="/">
@@ -19,10 +19,10 @@
                     </el-col>
                     <el-col :span="12">
                         <el-button size="small" @click="dialogform.dialogFormVisible = true">新增目录</el-button>
-                        <router-link :to="{path:'/add', query:{type:2, pro_id:$route.params.id}}">
+                        <router-link :to="{path:'/add', query:{type:'2', pro_id:$route.params.id}}">
                             <el-button size="small">新增普通文档</el-button>
                         </router-link>
-                        <router-link :to="{path:'/add', query:{type:1, pro_id:$route.params.id}}">
+                        <router-link :to="{path:'/add', query:{type:'1', pro_id:$route.params.id}}">
                             <el-button size="small">新增接口文档</el-button>
                         </router-link>
                     </el-col>
@@ -261,6 +261,10 @@
                     console.log(response); // 发生异常错误时执行的代码
                 });
                 this.dialogform.dialogFormVisible = false;
+            },
+            // 显示新增目录模板
+            dialogFormVisible() {
+                this.dialogform.dialogFormVisible = true;
             }
         },
         mounted () {

@@ -5,10 +5,10 @@
             <el-input v-model="input" placeholder="输入关键字后按回车以搜索" @keyup.enter.native="loadCats"></el-input>
             <div class="new-bar">
                 <el-tooltip class="item" effect="dark" content="新建页面" placement="left">
-                    <i class="el-icon-document"></i>
+                    <i class="el-icon-document" @click="addPage"></i>
                 </el-tooltip>
                 <el-tooltip class="item" effect="dark" content="新建目录" placement="right">
-                    <img class="icon-folder" src="/static/img/folder.png">
+                    <img class="icon-folder add" src="/static/img/folder.png" @click="showAddCat">
                 </el-tooltip>
             </div>
             <el-menu-item v-for="doc in sidebars.docs" v-if="sidebars.docs && sidebars.docs.length" :key="'doc_' + doc.id" :index="'doc_'+doc.id" @click="loadDoc(doc.id)">
@@ -74,6 +74,12 @@
             loadCats() {
                 this.$emit('loadCats', '', this.input);
                 this.input = '';
+            },
+            addPage() {
+                this.$router.push({path:'/add', query:{type:'1', pro_id:this.$route.params.id}});
+            },
+            showAddCat() {
+                this.$emit('showAddCat');
             },
             handleLoad(key, keyPath) {
                 this.loadDocs(key);

@@ -5,11 +5,11 @@
             <h1 class="title">{{title}}</h1>
 
             <el-form :inline="true" label-position="left">
-                <el-row>
-                    <el-form-item label="接口地址：" v-if="type == 1">
+                <el-row v-if="type == 1">
+                    <el-form-item label="接口地址：">
                         <code>{{ url }}</code>
                     </el-form-item>
-                    <el-form-item label="请求方式：" v-if="type == 1">
+                    <el-form-item label="请求方式：">
                         {{ method }}
                     </el-form-item>
                 </el-row>
