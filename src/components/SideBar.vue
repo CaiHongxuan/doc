@@ -106,7 +106,7 @@
         margin-top: 10px;
         margin-bottom: 5px;
     }
-    .new-bar i {
+    .new-bar i, .new-bar .add {
         cursor: pointer;
         margin-right: 15px;
     }
