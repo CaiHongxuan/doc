@@ -79,7 +79,8 @@
                 this.$router.push({path:'/add', query:{type:'1', pro_id:this.$route.params.id}});
             },
             showAddCat() {
-                this.$emit('showAddCat');
+                this.$router.push({path:'/catalog/' + this.$route.params.id});
+                // this.$emit('showAddCat');
             },
             handleLoad(key, keyPath) {
                 this.loadDocs(key);

@@ -4,6 +4,7 @@ import Index from '@/components/Index'
 import Detail from '@/components/Detail'
 import Add from '@/components/Add'
 import DocList from '@/components/DocList'
+import Catalog from '@/components/Catalog'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
             path: '/doclist/:id',
             name: 'DocList',
             component: DocList
+        },
+        {
+            path: '/catalog/:id',
+            name: 'Catalog',
+            component: Catalog
         }
     ]
 })
