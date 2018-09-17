@@ -57,14 +57,22 @@
                 }
                 return '';
             },
+            recurCat(Cats, is_children = false) {
+                for (var i = 0; i < Cats.length; i++) {
+                    is_children && (Cats[i].name = '---- ' + Cats[i].name);
+                    this.catalogs.push(Cats[i]);
+                    if (Cats[i].children && Cats[i].children.length) {
+                        this.recurCat(Cats[i].children, true);
+                    }
+                }
+            },
             // 加载目录
             loadCats (projectId) {
                 let that = this;
                 projectId = projectId ? projectId : that.project_id;
                 that.$axios.get('/catalogs', {pro_id:projectId}).then(function(response){
                     if (response.status == 200 && response.data.code == 0) {
-                        // todo 循环读取
-                        that.catalogs = response.data.data;
+                        that.recurCat(response.data.data);
                         // 采用JSON.parse与JSON.stringify防止浅拷贝
                         that.addCatalogs = JSON.parse(JSON.stringify(response.data.data));
                         that.addCatalogs.unshift({id: 0, name:"顶级目录"});
