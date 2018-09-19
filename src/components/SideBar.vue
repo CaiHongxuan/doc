@@ -7,7 +7,7 @@
                 <el-tooltip class="item" effect="dark" content="新建页面" placement="left">
                     <i class="el-icon-document" @click="addPage"></i>
                 </el-tooltip>
-                <el-tooltip class="item" effect="dark" content="新建目录" placement="right">
+                <el-tooltip class="item" effect="dark" content="新建/管理目录" placement="right">
                     <img class="icon-folder add" src="/static/img/folder.png" @click="showAddCat">
                 </el-tooltip>
             </div>
